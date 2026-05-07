@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目详情 | EasyFolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Space+Mono:wght@400;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 项目容器 */
+        .project-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem clamp(20px, 5vw, 80px);
+        }
+        
+        /* 返回链接 */
+        .project-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--muted);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+        
+        .project-back:hover { color: var(--sage); }
+        
+        /* 项目标题 */
+        .project-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 1rem;
+        }
+        
+        /* 项目元信息 */
+        .project-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .project-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .project-meta-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+        
+        .project-meta-value {
+            font-size: 0.9375rem;
+            color: var(--ink);
+        }
+        
+        /* 项目标签 */
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .project-tag {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            background: var(--sage-pale);
+            border-radius: 8px;
+            color: var(--sage);
+        }
+        
+        /* Markdown 内容样式 */
+        .project-content {
+            line-height: 1.8;
+            color: var(--ink-light);
+        }
+        
+        .project-content h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin: 2rem 0 1rem;
+        }
+        
+        .project-content h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--ink);
+            margin: 1.5rem 0 0.75rem;
+        }
+        
+        .project-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .project-content ul, .project-content ol {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .project-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .project-content strong {
+            font-weight: 600;
+            color: var(--ink);
+        }
+        
+        .project-content code {
+            background: var(--sage-pale);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.875em;
+            color: var(--sage);
+        }
+        
+        .project-content pre {
+            background: #1a1a1a;
+            color: #f0f0f0;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        .project-content pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+        
+        .project-content blockquote {
+            border-left: 3px solid var(--sage);
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: var(--muted);
+            font-style: italic;
+        }
+        
+        .project-content a {
+            color: var(--sage);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+        
+        .project-content a:hover {
+            border-bottom-color: var(--sage);
+        }
+        
+        .project-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .project-content table th,
+        .project-content table td {
+            border: 1px solid var(--border-light);
+            padding: 0.75rem;
+            text-align: left;
+        }
+        
+        .project-content table th {
+            background: var(--sage-pale);
+            font-weight: 600;
+        }
+        
+        /* 上下篇导航 */
+        .project-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .project-nav .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+        
+        .project-nav .nav-link:hover { color: var(--sage); }
+        
+        .project-nav .nav-link.disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        
+        /* ========== 加载状态样式 ========== */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 2rem;
+        }
+        
+        /* 加载动画容器 */
+        .loading-spinner {
+            position: relative;
+            width: 60px;
+            height: 60px;
+        }
+        
+        /* 外圈旋转动画 */
+        .loading-spinner .outer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 3px solid transparent;
+            border-top-color: var(--sage);
+            border-radius: 50%;
+            animation: spin-outer 1.2s linear infinite;
+        }
+        
+        /* 内圈反向旋转动画 */
+        .loading-spinner .inner {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+            border: 3px solid transparent;
+            border-bottom-color: var(--sage-pale);
+            border-radius: 50%;
+            animation: spin-inner 1s linear infinite;
+        }
+        
+        /* 中心点 */
+        .loading-spinner .center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            background: var(--sage);
+            border-radius: 50%;
+            animation: pulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin-outer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes spin-inner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; }
+        }
+        
+        .loading-text {
+            margin-top: 2rem;
+            color: var(--muted);
+            font-size: 0.9375rem;
+            letter-spacing: 0.05em;
+        }
+        
+        .loading-hint {
+            margin-top: 0.5rem;
+            color: var(--muted);
+            font-size: 0.8125rem;
+            opacity: 0.7;
+        }
+        
+        /* ========== 错误提示样式 ========== */
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+        
+        .error-icon {
+            font-size: 4rem;
+            color: var(--sage-pale);
+            margin-bottom: 1.5rem;
+        }
+        
+        .error-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 0.5rem;
+        }
+        
+        .error-desc {
+            color: var(--muted);
+            font-size: 0.9375rem;
+            margin-bottom: 2rem;
+            max-width: 400px;
+        }
+        
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .error-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        
+        .error-btn-primary {
+            background: var(--sage);
+            color: white;
+            border: none;
+        }
+        
+        .error-btn-primary:hover {
+            background: var(--sage-dark);
+        }
+        
+        .error-btn-secondary {
+            background: transparent;
+            color: var(--sage);
+            border: 1px solid var(--sage);
+        }
+        
+        .error-btn-secondary:hover {
+            background: var(--sage-pale);
+        }
+        
+        /* 网络错误专用样式 */
+        .error-network .error-icon {
+            color: #e0e0e0;
+        }
+        
+        /* 项目不存在样式 */
+        .error-not-found .error-icon {
+            color: var(--sage-pale);
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-logo" onclick="goHome()">FUTURA</div>
+        <div class="nav-links">
+            <a href="/index.html#hero" class="nav-link">首页</a>
+            <a href="/index.html#cases" class="nav-link">项目</a>
+            <a href="/index.html#about" class="nav-link">关于</a>
+            <a href="/index.html#contact" class="nav-link">联系</a>
+        </div>
+        <div class="nav-controls">
+            <a href="../easyfolio-ai/index.html" class="btn-primary">AI分析</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="project-container">
+            <a href="/index.html#cases" class="project-back" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+                <span>返回项目列表</span>
+            </a>
+
+            <!-- 加载状态 -->
+            <div id="loadingState" class="loading-container">
+                <div class="loading-spinner">
+                    <div class="outer"></div>
+                    <div class="inner"></div>
+                    <div class="center"></div>
+                </div>
+                <div class="loading-text">正在加载项目内容</div>
+                <div class="loading-hint">请稍候...</div>
+            </div>
+
+            <!-- 内容区域 -->
+            <div id="contentWrapper" style="display: none;">
+                <h1 class="project-title" id="projectTitle">项目标题</h1>
+                
+                <div class="project-meta">
+                    <div class="project-meta-item">
+                        <span class="project-meta-label">角色</span>
+                        <span class="project-meta-value" id="projectRole">角色信息</span>
+                    </div>
+                    <div class="project-meta-item">
+                        <span class="project-meta-label">时间</span>
+                        <span class="project-meta-value" id="projectYear">完成时间</span>
+                    </div>
+                </div>
+
+                <div class="project-tags" id="projectTags"></div>
+
+                <div class="project-content" id="projectContent"></div>
+
+                <div class="project-nav">
+                    <a href="#" class="nav-link" id="prevProject">
+                        <i class="fas fa-chevron-left"></i>
+                        <span>上一个项目</span>
+                    </a>
+                    <a href="#" class="nav-link" id="nextProject">
+                        <span>下一个项目</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 错误状态 -->
+            <div id="errorState" style="display: none;" class="error-container">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="error-title" id="errorTitle">加载失败</div>
+                <div class="error-desc" id="errorMessage">无法加载项目内容，请稍后重试。</div>
+                <div class="error-actions">
+                    <button class="error-btn error-btn-primary" onclick="retryLoad()">
+                        <i class="fas fa-redo"></i>
+                        <span>重新加载</span>
+                    </button>
+                    <a href="/index.html#cases" class="error-btn error-btn-secondary">
+                        <i class="fas fa-list"></i>
+                        <span>返回列表</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- marked库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="module">
+        // 配置 marked 库
+        marked.setOptions({
+            breaks: true,        // GFM换行符转换为 <br>
+            gfm: true,           // 启用 GitHub 风格的 Markdown
+            headerIds: false,     // 禁用标题 ID（避免潜在冲突）
+            mangle: false,       // 禁用标题 mangle
+            highlight: function(code, lang) {
+                // 如果有语言标识，返回原始代码
+                return code;
+            }
+        });
+
+        import { contentService } from '/assets/js/contentService.js';
+
+        let currentProjectId = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProject();
+        });
+
+        function goHome() {
+            window.location.href = '/index.html';
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function retryLoad() {
+            if (currentProjectId) {
+                hideError();
+                showLoading();
+                loadProject();
+            }
+        }
+
+        function showLoading() {
+            document.getElementById('loadingState').style.display = 'flex';
+            document.getElementById('contentWrapper').style.display = 'none';
+            document.getElementById('errorState').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingState').style.display = 'none';
+        }
+
+        function showContent() {
+            hideLoading();
+            document.getElementById('contentWrapper').style.display = 'block';
+            document.getElementById('errorState').style.display = 'none';
+        }
+
+        function showError(type, message) {
+            hideLoading();
+            document.getElementById('contentWrapper').style.display = 'none';
+            document.getElementById('errorState').style.display = 'flex';
+
+            const errorState = document.getElementById('errorState');
+            const errorIcon = errorState.querySelector('.error-icon i');
+            const errorTitle = document.getElementById('errorTitle');
+            const errorMessage = document.getElementById('errorMessage');
+
+            // 根据错误类型设置不同的样式和消息
+            errorState.className = 'error-container';
+            
+            switch (type) {
+                case 'network':
+                    errorState.classList.add('error-network');
+                    errorIcon.className = 'fas fa-wifi';
+                    errorTitle.textContent = '网络连接失败';
+                    errorMessage.textContent = message || '无法连接到服务器，请检查您的网络连接后重试。';
+                    break;
+                
+                case 'not-found':
+                    errorState.classList.add('error-not-found');
+                    errorIcon.className = 'fas fa-folder-open';
+                    errorTitle.textContent = '项目不存在';
+                    errorMessage.textContent = message || '未找到指定的项目，可能已被删除或移动。';
+                    break;
+                
+                case 'parse':
+                    errorIcon.className = 'fas fa-file-code';
+                    errorTitle.textContent = '内容解析失败';
+                    errorMessage.textContent = message || '无法解析项目内容格式，请稍后重试。';
+                    break;
+                
+                default:
+                    errorIcon.className = 'fas fa-exclamation-circle';
+                    errorTitle.textContent = '加载失败';
+                    errorMessage.textContent = message || '无法加载项目内容，请稍后重试。';
+            }
+        }
+
+        async function loadProject() {
+            const urlParams = new URLSearchParams(window.location.search);
+            currentProjectId = urlParams.get('id');
+
+            // 如果没有项目ID，显示错误
+            if (!currentProjectId) {
+                showError('not-found', '未指定项目ID');
+                return;
+            }
+
+            try {
+                // 并行获取项目详情和项目列表
+                const [project, projects] = await Promise.all([
+                    contentService.getProjectById(currentProjectId),
+                    contentService.getProjectList()
+                ]);
+
+                renderProject(project, projects, currentProjectId);
+            } catch (error) {
+                console.error('Failed to load project:', error);
+                
+                // 根据错误类型显示不同的错误提示
+                if (error.message && error.message.includes('404')) {
+                    showError('not-found', '未找到该项目，可能已被删除或移动。');
+                } else if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    showError('network', '网络连接失败，请检查您的网络后重试。');
+                } else {
+                    showError('default', error.message || '加载失败，请稍后重试。');
+                }
+            }
+        }
+
+        function renderProject(project, projects, currentId) {
+            const metadata = project.metadata;
+
+            document.getElementById('projectTitle').textContent = metadata.title || '未命名项目';
+            document.getElementById('projectRole').textContent = metadata.role || '';
+            document.getElementById('projectYear').textContent = metadata.year || '';
+
+            // 渲染标签
+            const tagsContainer = document.getElementById('projectTags');
+            tagsContainer.innerHTML = ''; // 清空现有标签
+            (metadata.tags || []).forEach(tag => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'project-tag';
+                tagElement.textContent = tag;
+                tagsContainer.appendChild(tagElement);
+            });
+
+            // 使用 marked 解析 Markdown 内容
+            const content = marked.parse(project.content || '');
+            document.getElementById('projectContent').innerHTML = content;
+
+            // 渲染上下篇导航
+            const projectIds = projects.map(p => p.id);
+            const currentIndex = projectIds.indexOf(currentId);
+            const prevProject = document.getElementById('prevProject');
+            const nextProject = document.getElementById('nextProject');
+
+            if (currentIndex <= 0) {
+                prevProject.classList.add('disabled');
+                prevProject.href = '#';
+            } else {
+                prevProject.classList.remove('disabled');
+                prevProject.href = `/project.html?id=${projectIds[currentIndex - 1]}`;
+            }
+
+            if (currentIndex >= projectIds.length - 1) {
+                nextProject.classList.add('disabled');
+                nextProject.href = '#';
+            } else {
+                nextProject.classList.remove('disabled');
+                nextProject.href = `/project.html?id=${projectIds[currentIndex + 1]}`;
+            }
+
+            // 成功加载后显示内容
+            showContent();
+
+            // 更新页面标题
+            document.title = `${metadata.title || '项目详情'} | EasyFolio`;
+        }
+    </script>
+</body>
+</html>

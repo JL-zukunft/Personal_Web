@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyFolio | AI产品设计师</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Space+Mono:wght@400;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-logo" onclick="scrollToTop()">FUTURA</div>
+        <div class="nav-links">
+            <a href="#hero" class="nav-link active">首页</a>
+            <a href="#cases" class="nav-link">项目</a>
+            <a href="#about" class="nav-link">关于</a>
+            <a href="#contact" class="nav-link">联系</a>
+        </div>
+        <div class="nav-controls">
+            <a href="../easyfolio-ai/index.html" class="btn-primary">AI分析</a>
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileMenu()"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-close" onclick="closeMobileMenu()">×</div>
+        <a href="#hero" class="mobile-nav-link" onclick="closeMobileMenu()">首页</a>
+        <a href="#cases" class="mobile-nav-link" onclick="closeMobileMenu()">项目</a>
+        <a href="#about" class="mobile-nav-link" onclick="closeMobileMenu()">关于</a>
+        <a href="#contact" class="mobile-nav-link" onclick="closeMobileMenu()">联系</a>
+        <a href="../easyfolio-ai/index.html" class="mobile-nav-link">AI分析</a>
+    </div>
+
+    <main>
+        <section id="hero" class="hero container">
+            <div class="hero-left">
+                <h1 class="hero-greeting">
+                    消费品<span>×</span> AI产品设计师
+                </h1>
+                <div class="hero-tag">
+                    <span class="hero-tag-dot"></span>
+                    <span class="hero-tag-text">INNOVATION DESIGN</span>
+                </div>
+                <p class="hero-subtitle">
+                    专注于AI驱动的产品体验设计，将技术创新与用户需求完美融合，创造有意义的数字产品。
+                </p>
+                <div class="hero-cta">
+                    <button class="btn-primary" onclick="scrollToSection('cases')">
+                        <i class="fas fa-arrow-right"></i>
+                        查看项目
+                    </button>
+                    <button class="btn-outline" onclick="scrollToSection('about')">
+                        <i class="fas fa-user"></i>
+                        了解更多
+                    </button>
+                </div>
+            </div>
+            <div class="hero-cards">
+                <div class="skill-card">
+                    <div class="skill-card-label">设计能力</div>
+                    <div class="skill-tags">
+                        <span class="skill-tag">UI设计</span>
+                        <span class="skill-tag">UX研究</span>
+                        <span class="skill-tag">交互设计</span>
+                        <span class="skill-tag">设计系统</span>
+                    </div>
+                    <p class="skill-card-desc">
+                        从用户研究到界面设计，打造完整的产品体验
+                    </p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-card-label">AI能力</div>
+                    <div class="skill-tags">
+                        <span class="skill-tag">提示工程</span>
+                        <span class="skill-tag">AI集成</span>
+                        <span class="skill-tag">智能交互</span>
+                        <span class="skill-tag">数据分析</span>
+                    </div>
+                    <p class="skill-card-desc">
+                        将AI能力融入产品设计，提升效率与体验
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="cases" class="cases-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-label">SELECTED WORKS</span>
+                    <h2 class="section-title">项目案例</h2>
+                    <p class="section-subtitle">
+                        探索我最近的设计项目，涵盖AI产品、消费电子和企业服务领域
+                    </p>
+                </div>
+                <div class="cases-list" id="casesList">
+                    <!-- 动态加载项目列表 -->
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about-section container">
+            <div class="section-header">
+                <span class="section-label">ABOUT ME</span>
+                <h2 class="section-title">关于我</h2>
+            </div>
+            <div class="about-content">
+                <p>
+                    我是一名专注于AI产品设计的设计师，拥有多年消费品和企业级产品设计经验。我相信好的设计应该是技术与人性的完美结合，让复杂的技术变得简单易用。
+                </p>
+                <p>
+                    在过去的几年里，我参与了多个AI产品的设计工作，从智能助手到数据分析平台，积累了丰富的AI产品设计经验。我擅长将复杂的AI能力转化为直观的用户体验。
+                </p>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-label">GET IN TOUCH</span>
+                    <h2 class="section-title">联系我</h2>
+                </div>
+                <div class="contact-links">
+                    <a href="mailto:hello@easyfolio.com" class="contact-link">
+                        <i class="fas fa-envelope"></i>
+                        <span>hello@easyfolio.com</span>
+                    </a>
+                    <a href="https://github.com" class="contact-link">
+                        <i class="fab fa-github"></i>
+                        <span>Github</span>
+                    </a>
+                    <a href="https://linkedin.com" class="contact-link">
+                        <i class="fab fa-linkedin"></i>
+                        <span>LinkedIn</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="/assets/js/main.js"></script>
+</body>
+</html>

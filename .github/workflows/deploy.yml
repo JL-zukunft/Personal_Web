@@ -1,0 +1,124 @@
+# EasyFolio GitHub Actions 部署脚本
+# ==================================
+#
+# 【小白解释：
+# 这是自动化部署的"流水线"
+# 当你 push 代码到 main 分支时，自动构建和部署网站
+#
+# 【部署内容】：
+# - easyfolio-portfolio（作品集网站）→ GitHub Pages
+# - server（后端服务）→ 需要单独部署到支持 Python 的平台
+#
+# 【注意】：
+# 由于 GitHub Pages 是静态托管，后端服务需要部署到其他地方
+# 推荐：Railway、Render、Fly.io 等支持 Python 的平台
+#
+
+name: Deploy EasyFolio to GitHub Pages
+
+on:
+  # 当 push 到 main 分支时触发
+  push:
+    branches: [main]
+  # 也可以手动触发
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 设置并发组，防止多个部署同时进行
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # ========================================
+  # 作业1：部署作品集网站（静态页面）
+  # ========================================
+  deploy-portfolio:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          cd easyfolio-portfolio
+          npm ci
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'easyfolio-portfolio'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Print deployment URL
+        run: |
+          echo "作品集网站已部署到: ${{ steps.deployment.outputs.page_url }}"
+
+  # ========================================
+  # 作业2：部署 AI 简历分析器（可选）
+  # ========================================
+  deploy-ai:
+    runs-on: ubuntu-latest
+    if: false  # 设置为 true 可以同时部署 AI 前端
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          cd easyfolio-ai
+          npm ci
+
+      - name: Build
+        run: |
+          cd easyfolio-ai
+          npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'easyfolio-ai/dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment-ai
+        uses: actions/deploy-pages@v4
+
+      - name: Print deployment URL
+        run: |
+          echo "AI简历分析器已部署到: ${{ steps.deployment-ai.outputs.page_url }}"
+
+# ========================================
+# 备选方案：使用 GitHub Actions 部署后端
+# ========================================
+# 如果你想把后端也部署到云端，可以取消下面的注释
+# 并创建额外的 workflow 文件（如 backend.yml）
+#
+# 推荐平台：
+# - Railway (railway.app)
+# - Render (render.com)
+# - Fly.io (fly.io)
+# - Vercel Serverless Functions
+#
+# 这些平台都支持 Python Flask 后端部署

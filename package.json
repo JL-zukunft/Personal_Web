@@ -1,0 +1,26 @@
+{
+  "name": "easyfolio",
+  "version": "1.0.0",
+  "description": "EasyFolio - AI Resume Analyzer & Portfolio Builder",
+  "scripts": {
+    "dev:ai": "cd easyfolio-ai && npm run dev",
+    "dev:portfolio": "cd easyfolio-portfolio && npm run dev",
+    "install:all": "npm install && cd easyfolio-ai && npm install && cd ../easyfolio-portfolio && npm install",
+    "build:ai": "cd easyfolio-ai && npm run build",
+    "build:portfolio": "cd easyfolio-portfolio && npm run build",
+    "build:all": "npm run build:ai && npm run build:portfolio"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0"
+  },
+  "keywords": [
+    "easyfolio",
+    "portfolio",
+    "resume",
+    "ai",
+    "coze"
+  ],
+  "author": "EasyFolio",
+  "license": "MIT",
+  "note": "后端使用 Vercel Serverless Function (api/chat.js)，开发环境使用 npm run dev:server"
+}

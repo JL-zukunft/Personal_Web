@@ -1,0 +1,37 @@
+{
+	"nodes":[
+		{"id":"user-journey-group","type":"group","x":-50,"y":-50,"width":1400,"height":800,"color":"4","label":"EasyFolio 用户旅程流程图"},
+		{"id":"user-types","type":"text","text":"# 用户类型\n\n## A. 求职者/创作者\n- 目标：使用AI优化简历\n- 行为：体验AI工作流\n\n## B. 猎头/招聘者\n- 目标：了解候选人\n- 行为：查看项目经历","x":50,"y":50,"width":300,"height":180,"color":"3"},
+		{"id":"journey-a-start","type":"text","text":"# 用户A旅程\n## AI简历分析\n\n1. 点击AI分析按钮\n2. 进入聊天界面\n3. 输入简历内容\n4. 获得优化建议","x":50,"y":260,"width":300,"height":260,"color":"5"},
+		{"id":"journey-b-start","type":"text","text":"# 用户B旅程\n## 查看项目经历\n\n1. 浏览案例卡片\n2. 点击感兴趣案例\n3. 进入案例详情页\n4. 详细了解项目","x":400,"y":260,"width":300,"height":260,"color":"6"},
+		{"id":"a-outcome","type":"text","text":"# 结果\n\n- 获取简历优化建议\n- 应用到作品集\n- 提升求职竞争力","x":50,"y":900,"width":300,"height":180,"color":"5"},
+		{"id":"ai-workflow","type":"text","text":"# AI工作流体验\n\n- 流式响应展示\n- 任务规划解析\n- 思考过程查看\n- 进度可视化","x":50,"y":615,"width":300,"height":210,"color":"5"},
+		{"id":"b-outcome","type":"text","text":"# 结果\n\n- 了解候选人能力\n- 评估技术实力\n- 通过联系方式沟通","x":400,"y":990,"width":300,"height":180,"color":"6"},
+		{"id":"entry-point","type":"text","text":"# 入口点\n\n- 直接访问首页\n- 通过分享链接进入\n- 搜索结果跳转","x":420,"y":-75,"width":280,"height":100,"color":"2"},
+		{"id":"home-page-view","type":"text","text":"# 首页浏览\n\n- 查看个人简介\n- 浏览技能卡片\n- 预览案例列表\n- 了解方法论","x":820,"y":-140,"width":280,"height":230,"color":"2"},
+		{"id":"social-sharing","type":"text","text":"# 分享传播\n\n- 社交媒体分享\n- 招聘平台发布\n- 个人链接推广\n- 扩大影响力","x":1215,"y":-140,"width":270,"height":235,"color":"1"},
+		{"id":"analytics","type":"text","text":"# 数据统计\n\n- 访客量追踪\n- 浏览时长分析\n- 页面热度排行\n- 来源渠道统计","x":1215,"y":210,"width":270,"height":220,"color":"4"},
+		{"id":"contact-section","type":"text","text":"# 联系区域\n\n- 查看联系方式\n- 访问社交媒体\n- 获取邮箱/电话\n- 发送联系请求","x":890,"y":860,"width":280,"height":220,"color":"1"},
+		{"id":"language-switch","type":"text","text":"# 多语言支持\n\n- 中英文实时切换\n- 内容国际化\n- 适配不同用户","x":1240,"y":515,"width":280,"height":200,"color":"2"},
+		{"id":"responsive-design","type":"text","text":"# 响应式适配\n\n- 桌面端浏览\n- 平板访问\n- 移动端查看","x":1240,"y":738,"width":280,"height":175,"color":"2"},
+		{"id":"cross-journey","type":"text","text":"# 跨旅程互动\n\n**用户A → 用户B**\n优化后的作品集\n更吸引猎头关注\n\n**用户B → 用户A**\n联系候选人\n产生工作机会","x":890,"y":140,"width":280,"height":275,"color":"4"},
+		{"id":"case-detail-view","type":"text","text":"# 案例详情浏览\n\n- 挑战描述\n- 解决方案\n- 实施方法\n- 成果展示\n- 技术栈标签","x":400,"y":663,"width":300,"height":250,"color":"6"}
+	],
+	"edges":[
+		{"id":"user-to-entry","fromNode":"user-types","fromSide":"right","toNode":"entry-point","toSide":"left","label":"进入网站"},
+		{"id":"entry-to-home","fromNode":"entry-point","fromSide":"right","toNode":"home-page-view","toSide":"left","label":"浏览首页"},
+		{"id":"home-to-a","fromNode":"home-page-view","fromSide":"bottom","toNode":"journey-a-start","toSide":"top","label":"点击AI分析"},
+		{"id":"home-to-b","fromNode":"home-page-view","fromSide":"bottom","toNode":"journey-b-start","toSide":"top","label":"点击案例"},
+		{"id":"a-start-to-workflow","fromNode":"journey-a-start","fromSide":"bottom","toNode":"ai-workflow","toSide":"top","label":"体验AI工作流"},
+		{"id":"workflow-to-a-outcome","fromNode":"ai-workflow","fromSide":"bottom","toNode":"a-outcome","toSide":"top","label":"获得建议"},
+		{"id":"b-start-to-detail","fromNode":"journey-b-start","fromSide":"bottom","toNode":"case-detail-view","toSide":"top","label":"查看详情"},
+		{"id":"detail-to-b-outcome","fromNode":"case-detail-view","fromSide":"bottom","toNode":"b-outcome","toSide":"top","label":"评估候选人"},
+		{"id":"home-to-contact","fromNode":"home-page-view","fromSide":"bottom","toNode":"contact-section","toSide":"top","label":"访问联系区域"},
+		{"id":"contact-to-b-outcome","fromNode":"contact-section","fromSide":"bottom","toNode":"b-outcome","toSide":"right","label":"发起联系"},
+		{"id":"a-to-cross","fromNode":"a-outcome","fromSide":"right","toNode":"cross-journey","toSide":"left","label":"优化作品集"},
+		{"id":"b-to-cross","fromNode":"b-outcome","fromSide":"right","toNode":"cross-journey","toSide":"left","label":"发现人才"},
+		{"id":"cross-to-contact","fromNode":"cross-journey","fromSide":"top","toNode":"contact-section","toSide":"bottom","label":"建立联系"},
+		{"id":"a-outcome-to-share","fromNode":"a-outcome","fromSide":"right","toNode":"social-sharing","toSide":"left","label":"分享作品集"},
+		{"id":"share-to-analytics","fromNode":"social-sharing","fromSide":"bottom","toNode":"analytics","toSide":"top","label":"追踪数据"}
+	]
+}

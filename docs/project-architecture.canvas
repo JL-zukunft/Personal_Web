@@ -1,0 +1,34 @@
+{
+	"nodes":[
+		{"id":"ai001","type":"group","x":300,"y":150,"width":400,"height":500,"color":"4","label":"easyfolio-ai / AI简历分析器"},
+		{"id":"port001","type":"group","x":750,"y":150,"width":400,"height":500,"color":"5","label":"easyfolio-portfolio / 作品集网站【主入口】"},
+		{"id":"server001","type":"group","x":300,"y":700,"width":400,"height":400,"color":"2","label":"server / 后端服务"},
+		{"id":"share001","type":"group","x":750,"y":700,"width":400,"height":400,"color":"6","label":"共享资源库"},
+		{"id":"root001","type":"text","text":"# EasyFolio 项目\n一个AI驱动的作品集生成平台","x":400,"y":0,"width":300,"height":80,"color":"5"},
+		{"id":"ai002","type":"text","text":"## 功能\n- 简历智能分析\n- 职场能力评估\n- 岗位匹配分析\n- AI任务规划","x":320,"y":180,"width":180,"height":80},
+		{"id":"ai003","type":"text","text":"## 技术栈\n- React 18\n- Vite\n- Tailwind CSS\n- Coze SDK","x":520,"y":180,"width":160,"height":80},
+		{"id":"ai004","type":"text","text":"## 核心文件\n- src/pages/Home.jsx\n- src/pages/AIResumeAnalyzer.jsx\n- src/components/\n- src/App.jsx","x":320,"y":300,"width":360,"height":120},
+		{"id":"ai005","type":"text","text":"## 端口\nhttp://localhost:5173","x":320,"y":450,"width":360,"height":80},
+		{"id":"port002","type":"text","text":"## 功能\n- 主页作品展示【主入口】\n- 多项目子页跳转\n- Markdown内容管理\n- 响应式布局","x":770,"y":180,"width":180,"height":80},
+		{"id":"port003","type":"text","text":"## 技术栈\n- HTML5\n- CSS3\n- JavaScript\n- Markdown","x":970,"y":180,"width":160,"height":80},
+		{"id":"port004","type":"text","text":"## 核心文件\n- index.html (主页/主入口)\n- project.html (详情)\n- content/projects/*.md\n- assets/css/main.css","x":770,"y":300,"width":360,"height":120},
+		{"id":"port005","type":"text","text":"## 端口\nhttp://localhost:3001","x":770,"y":450,"width":360,"height":80},
+		{"id":"server002","type":"text","text":"## 功能\n- AI对话API接口\n- 请求转发处理\n- 环境变量管理\n- CORS跨域支持","x":320,"y":730,"width":180,"height":80},
+		{"id":"server003","type":"text","text":"## 技术栈\n- Express\n- Coze SDK\n- dotenv\n- cors","x":520,"y":730,"width":160,"height":80},
+		{"id":"server004","type":"text","text":"## 核心文件\n- server.js (主程序)\n- package.json\n- .env (环境变量)","x":320,"y":850,"width":360,"height":120},
+		{"id":"server005","type":"text","text":"## 端口\nhttp://localhost:5000","x":320,"y":1000,"width":360,"height":80},
+		{"id":"share002","type":"text","text":"## styles/ 样式库\n- components/ 组件样式\n- sections/ 区块样式\n- base/ 基础变量\n- utilities/ 动画工具","x":770,"y":730,"width":180,"height":80},
+		{"id":"doc001","type":"text","text":"# docs/\n项目文档目录\n- 用户指南\n- 技术方案\n- 产品PRD","x":1200,"y":150,"width":200,"height":100,"color":"3"},
+		{"id":"share003","type":"text","text":"## utils/ 工具库\n- api.js 网络请求\n- storage.js 本地存储\n- markdown.js 解析","x":970,"y":730,"width":160,"height":80},
+		{"id":"share004","type":"text","text":"## config/ 配置\n- vite/ Vite配置\n- tailwind/ 主题配置","x":770,"y":850,"width":180,"height":80},
+		{"id":"share005","type":"text","text":"## docs/ 文档\n- 用户指南\n- 技术文档\n- 产品需求","x":970,"y":850,"width":160,"height":80}
+	],
+	"edges":[
+		{"id":"edge004","fromNode":"ai001","fromSide":"bottom","toNode":"server001","toSide":"top","label":"AI对话请求"},
+		{"id":"edge005","fromNode":"ai001","fromSide":"right","toNode":"share001","toSide":"left","label":"共享样式"},
+		{"id":"edge006","fromNode":"port001","fromSide":"right","toNode":"doc001","toSide":"left","label":"参考文档"},
+		{"id":"edge007","fromNode":"share001","fromSide":"bottom","toNode":"server001","toSide":"right","label":"配置共享"},
+		{"id":"edge008","fromNode":"port001","fromSide":"left","toNode":"ai001","toSide":"right","label":"跳转AI分析"},
+		{"id":"edge009","fromNode":"ai001","fromSide":"left","toNode":"port001","label":"跳转作品集","toSide":"left"}
+	]
+}

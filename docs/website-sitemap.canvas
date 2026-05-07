@@ -1,0 +1,20 @@
+{
+	"nodes":[
+		{"id":"easyfolio-sitemap","type":"group","x":-50,"y":-50,"width":1100,"height":700,"color":"4","label":"EasyFolio Website Sitemap"},
+		{"id":"navigation-flow","type":"text","text":"# 导航流程\n\n**首页 → AI分析页**\n点击导航栏AI分析按钮\n\n**首页 → 案例详情页**\n点击案例卡片\n\n**案例详情页 → 首页**\n点击页脚返回链接\n\n**AI分析页 → 首页**\n点击返回导航","x":50,"y":500,"width":320,"height":360,"color":"3"},
+		{"id":"case-detail-page","type":"text","text":"# 案例详情页\n\n## 页面布局\n- 侧边栏导航\n- 主内容区\n\n## 案例头部\n- 案例编号\n- 项目名称\n- 主标题\n- 技术标签\n\n## 案例内容\n- 挑战描述\n- 解决方案\n- 实施方法\n- 成果展示\n\n## 导航功能\n- 项目选择器\n- 相关案例推荐\n- 返回首页链接","x":750,"y":-440,"width":300,"height":850,"color":"6"},
+		{"id":"home-page","type":"text","text":"# 首页 (作品集网站)\n\n## 导航栏\n- Logo\n- 首页链接\n- 案例链接\n- 关于我链接\n- 语言切换按钮\n- AI分析跳转按钮\n\n## Hero区域\n- 个人简介\n- 职业标签\n- 技能卡片\n- CTA按钮\n\n## 案例展示区\n- 案例卡片网格\n- 案例导航指示器\n\n## 方法论区域\n- 工作流程\n- 核心能力展示\n\n## 联系区域\n- 联系方式\n- 社交媒体链接","x":50,"y":-540,"width":320,"height":1000,"color":"2"},
+		{"id":"ai-analyzer-page","type":"text","text":"# AI简历分析页\n\n## 布局结构\n- 左侧：进度条 + 任务规划\n- 右侧：聊天区域\n\n## 核心功能\n- AI对话交互\n- 流式响应（打字机效果）\n- 任务规划解析\n- 思考过程展示\n- 进度追踪可视化\n\n## 交互效果\n- 消息发送（回车/按钮）\n- 自动滚动\n- 任务列表动态更新\n- 思考过程展开/收起","x":400,"y":-260,"width":320,"height":670,"color":"5"},
+		{"id":"system-architecture","type":"text","text":"# 系统架构\n\n## 输入层\n- 用户浏览器\n- 本地文件管理\n\n## 处理层\n- Vercel Edge Network\n- Serverless Function\n- Coze API\n- React渲染\n\n## 输出层\n- 首页展示\n- AI分析页\n- 案例详情页","x":450,"y":480,"width":300,"height":600,"color":"4"},
+		{"id":"content-categories","type":"text","text":"# 内容分类\n\n## 个人信息\n- 姓名/职位\n- 联系方式\n- 个人简介\n- 技能标签\n\n## 项目案例\n- 项目描述\n- 技术栈\n- 实施过程\n- 成果展示\n\n## 交互功能\n- 多语言切换\n- 滚动动画\n- 悬停效果\n- 页面过渡","x":800,"y":460,"width":320,"height":700,"color":"1"}
+	],
+	"edges":[
+		{"id":"home-to-ai","fromNode":"home-page","fromSide":"right","toNode":"ai-analyzer-page","toSide":"left","label":"AI分析跳转"},
+		{"id":"home-to-case","fromNode":"home-page","fromSide":"right","toNode":"case-detail-page","toSide":"left","label":"案例点击"},
+		{"id":"case-to-home","fromNode":"case-detail-page","fromSide":"left","toNode":"home-page","toSide":"right","label":"返回首页"},
+		{"id":"ai-to-home","fromNode":"ai-analyzer-page","fromSide":"left","toNode":"home-page","toSide":"right","label":"返回首页"},
+		{"id":"nav-to-home","fromNode":"navigation-flow","fromSide":"bottom","toNode":"home-page","toSide":"bottom"},
+		{"id":"content-to-pages","fromNode":"content-categories","fromSide":"bottom","toNode":"case-detail-page","toSide":"bottom"},
+		{"id":"arch-to-pages","fromNode":"system-architecture","fromSide":"bottom","toNode":"ai-analyzer-page","toSide":"bottom"}
+	]
+}
