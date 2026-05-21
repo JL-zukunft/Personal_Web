@@ -1,36 +1,146 @@
-// 导入内容服务模块
-import { contentService } from './contentService.js';
+// 项目文件列表（自动生成）
+const projectFiles = [
+    "2026-03-02-data-analytics.md",
+    "2026-06-01-ai-assistant.md",
+    "2026-08-04-smart-home.md",
+    "2026-11-03-smart-customer.md",
+    "2026-12-99-test-project.md"
+];
 
-/**
- * 页面加载完成后执行初始化操作
- */
+// 内容服务类
+class ContentService {
+    constructor() {
+        this.cache = new Map();
+        this.projectList = null;
+    }
+
+    async fetchMarkdown(filePath) {
+        const cacheKey = filePath;
+        if (this.cache.has(cacheKey)) {
+            return this.cache.get(cacheKey);
+        }
+
+        try {
+            const response = await fetch(filePath);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch ${filePath}: ${response.status}`);
+            }
+            const content = await response.text();
+            this.cache.set(cacheKey, content);
+            return content;
+        } catch (error) {
+            console.error('ContentService error:', error);
+            throw error;
+        }
+    }
+
+    parseFrontmatter(content) {
+        const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
+        const match = content.match(frontmatterRegex);
+        
+        if (!match) {
+            return { metadata: null, content: content };
+        }
+
+        const frontmatter = match[1];
+        const markdownContent = match[2];
+        
+        try {
+            const metadata = this.parseYAML(frontmatter);
+            return { metadata, content: markdownContent };
+        } catch (error) {
+            console.warn('Failed to parse frontmatter YAML');
+            return { metadata: null, content: content };
+        }
+    }
+
+    parseYAML(yamlString) {
+        const result = {};
+        const lines = yamlString.split('\n');
+        
+        for (const line of lines) {
+            const trimmedLine = line.trim();
+            if (!trimmedLine || trimmedLine.startsWith('#')) {
+                continue;
+            }
+            
+            const colonIndex = trimmedLine.indexOf(':');
+            if (colonIndex === -1) {
+                continue;
+            }
+            
+            const key = trimmedLine.substring(0, colonIndex).trim();
+            const value = trimmedLine.substring(colonIndex + 1).trim();
+            
+            if (value.startsWith('[') && value.endsWith(']')) {
+                try {
+                    result[key] = JSON.parse(value);
+                } catch {
+                    result[key] = value.slice(1, -1).split(',').map(item => item.trim().replace(/["']/g, ''));
+                }
+            } else if (value === 'true' || value === 'false') {
+                result[key] = value === 'true';
+            } else if (!isNaN(value)) {
+                result[key] = parseFloat(value);
+            } else if (value.startsWith('"') && value.endsWith('"')) {
+                result[key] = value.slice(1, -1);
+            } else {
+                result[key] = value;
+            }
+        }
+        
+        return result;
+    }
+
+    async getProjectList() {
+        if (this.projectList) {
+            return this.projectList;
+        }
+
+        const projects = [];
+
+        for (const fileName of projectFiles) {
+            try {
+                const content = await this.fetchMarkdown(`/content/projects/${fileName}`);
+                const { metadata } = this.parseFrontmatter(content);
+                
+                projects.push({
+                    id: fileName.replace('.md', ''),
+                    ...metadata
+                });
+            } catch (error) {
+                console.warn(`Failed to load project: ${fileName}`, error);
+            }
+        }
+
+        this.projectList = projects.sort((a, b) => (a.order || 999) - (b.order || 999));
+        return this.projectList;
+    }
+}
+
+// 创建内容服务实例
+const contentService = new ContentService();
+
+// 页面加载完成后执行初始化操作
 document.addEventListener('DOMContentLoaded', function() {
-    loadProjects();      // 加载项目列表
-    setupScrollAnimation();  // 设置滚动动画
-    setupNavHighlight(); // 设置导航高亮
+    loadProjects();
+    setupScrollAnimation();
+    setupNavHighlight();
 });
 
-/**
- * 加载项目列表并渲染到页面
- */
+// 加载项目列表
 async function loadProjects() {
-    // 获取项目列表容器元素
     const casesList = document.getElementById('casesList');
-    
-    // 如果容器不存在，直接返回
     if (!casesList) {
         return;
     }
     
     try {
-        // 从 contentService 获取项目列表
         const projects = await contentService.getProjectList();
         
-        // 遍历每个项目，创建对应的 DOM 元素
         projects.forEach(project => {
             const caseItem = document.createElement('div');
             caseItem.className = 'case-item';
-            // 设置项目卡片的 HTML 结构
             caseItem.innerHTML = `
                 <div class="case-header" onclick="toggleCase('${project.id}')">
                     <div class="case-number">${String(project.order || 1).padStart(2, '0')}</div>
@@ -61,11 +171,9 @@ async function loadProjects() {
                     </div>
                 </div>
             `;
-            // 将项目卡片添加到容器中
             casesList.appendChild(caseItem);
         });
     } catch (error) {
-        // 如果加载失败，显示错误提示
         console.error('Failed to load projects:', error);
         casesList.innerHTML = `
             <div class="error-message">
@@ -75,19 +183,12 @@ async function loadProjects() {
     }
 }
 
-/**
- * 切换项目卡片的展开/收起状态
- * @param {string} projectId - 项目 ID
- */
+// 切换项目卡片状态
 function toggleCase(projectId) {
-    // 找到对应的项目卡片元素
     const caseItem = document.querySelector(`[onclick="toggleCase('${projectId}')"]`).parentElement;
-    // 切换 open 类
     caseItem.classList.toggle('open');
     
-    // 找到详情区域
     const detail = document.getElementById(`detail-${projectId}`);
-    // 根据状态设置最大高度（实现展开/收起动画）
     if (caseItem.classList.contains('open')) {
         detail.style.maxHeight = '500px';
     } else {
@@ -95,18 +196,12 @@ function toggleCase(projectId) {
     }
 }
 
-/**
- * 跳转到项目详情页
- * @param {string} projectId - 项目 ID
- */
+// 打开项目详情页
 function openProject(projectId) {
-    // 跳转到项目详情页，携带项目 ID 参数
     window.location.href = `/project.html?id=${projectId}`;
 }
 
-/**
- * 切换移动端菜单显示/隐藏
- */
+// 切换移动端菜单
 function toggleMobileMenu() {
     const mobileMenu = document.getElementById('mobileMenu');
     const mobileOverlay = document.getElementById('mobileOverlay');
@@ -114,9 +209,7 @@ function toggleMobileMenu() {
     mobileOverlay.classList.toggle('open');
 }
 
-/**
- * 关闭移动端菜单
- */
+// 关闭移动端菜单
 function closeMobileMenu() {
     const mobileMenu = document.getElementById('mobileMenu');
     const mobileOverlay = document.getElementById('mobileOverlay');
@@ -124,17 +217,12 @@ function closeMobileMenu() {
     mobileOverlay.classList.remove('open');
 }
 
-/**
- * 滚动到页面顶部
- */
+// 滚动到顶部
 function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/**
- * 滚动到指定区域
- * @param {string} sectionId - 区域 ID
- */
+// 滚动到指定区域
 function scrollToSection(sectionId) {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -142,10 +230,7 @@ function scrollToSection(sectionId) {
     }
 }
 
-/**
- * 设置滚动动画效果
- * 当元素进入视口时添加 visible 类
- */
+// 设置滚动动画
 function setupScrollAnimation() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -155,22 +240,17 @@ function setupScrollAnimation() {
         });
     }, { threshold: 0.1 });
 
-    // 观察所有带有 reveal 类的元素
     document.querySelectorAll('.reveal').forEach(el => {
         observer.observe(el);
     });
 }
 
-/**
- * 设置导航高亮
- * 根据当前滚动位置高亮对应的导航链接
- */
+// 设置导航高亮
 function setupNavHighlight() {
     window.addEventListener('scroll', () => {
         const sections = ['hero', 'cases', 'about', 'contact'];
         let currentSection = '';
 
-        // 遍历所有区域，判断哪个区域在视口中
         sections.forEach(section => {
             const element = document.getElementById(section);
             if (element) {
@@ -181,7 +261,6 @@ function setupNavHighlight() {
             }
         });
 
-        // 更新导航链接的高亮状态
         document.querySelectorAll('.nav-link').forEach(link => {
             link.classList.remove('active');
             if (link.getAttribute('href') === `#${currentSection}`) {
