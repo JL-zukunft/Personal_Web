@@ -4,7 +4,7 @@
   justify-content: center;
   padding: 0.5rem 1rem;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 50px !important;
   font-family: inherit;
   font-size: 1rem;
   font-weight: 500;

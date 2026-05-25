@@ -9,6 +9,19 @@ role: UX Designer
 year: 2026
 order: 2
 description: 面向企业的数据分析平台，支持实时数据可视化和智能洞察生成。
+roadmap:
+  - phase: "数据建模"
+    date: "2025.11"
+    icon: "📊"
+  - phase: "UI设计"
+    date: "2025.12"
+    icon: "🎨"
+  - phase: "开发集成"
+    date: "2026.01"
+    icon: "🔗"
+  - phase: "测试上线"
+    date: "2026.03"
+    icon: "🚀"
 ---
 
 ## 项目概述

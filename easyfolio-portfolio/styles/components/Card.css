@@ -88,10 +88,12 @@
 }
 
 .skill-card-label {
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 700;
   color: var(--sage);
   margin-bottom: 1rem;
+  letter-spacing: 0.02em;
+  font-family: var(--font-tech);
 }
 
 .skill-tags {

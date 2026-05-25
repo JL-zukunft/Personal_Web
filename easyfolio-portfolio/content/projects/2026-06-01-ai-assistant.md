@@ -9,6 +9,19 @@ role: Lead Designer
 year: 2026
 order: 1
 description: 为企业用户设计的AI智能助手，集成了自然语言理解、任务管理和数据分析功能。
+roadmap:
+  - phase: "需求调研"
+    date: "2026.03"
+    icon: "📋"
+  - phase: "原型设计"
+    date: "2026.04"
+    icon: "🎨"
+  - phase: "研发迭代"
+    date: "2026.05"
+    icon: "💻"
+  - phase: "上线发布"
+    date: "2026.06"
+    icon: "🚀"
 ---
 
 ## 项目概述
