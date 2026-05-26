@@ -1,7 +1,7 @@
 // 项目文件列表（自动生成）
 const projectFiles = [
     "2026-03-02-data-analytics.md",
-    "2026-06-01-ai-assistant.md",
+    "2026-05-01-peronal-aihtml.md",
     "2026-08-04-smart-home.md",
     "2026-11-03-smart-customer.md",
     "2026-12-99-test-project.md",
@@ -62,11 +62,29 @@ class ContentService {
     parseYAML(yamlString) {
         const result = {};
         const lines = yamlString.split('\n');
+        let currentKey = null;
+        let currentArray = [];
         
         for (const line of lines) {
             const trimmedLine = line.trim();
+            const leadingSpaces = line.length - trimmedLine.length;
+            
             if (!trimmedLine || trimmedLine.startsWith('#')) {
                 continue;
+            }
+            
+            if (trimmedLine.startsWith('- ')) {
+                const item = trimmedLine.substring(2).trim().replace(/["']/g, '');
+                if (currentKey && currentArray !== null) {
+                    currentArray.push(item);
+                }
+                continue;
+            }
+            
+            if (currentKey && currentArray.length > 0) {
+                result[currentKey] = currentArray;
+                currentKey = null;
+                currentArray = [];
             }
             
             const colonIndex = trimmedLine.indexOf(':');
@@ -76,6 +94,12 @@ class ContentService {
             
             const key = trimmedLine.substring(0, colonIndex).trim();
             const value = trimmedLine.substring(colonIndex + 1).trim();
+            
+            if (value === '') {
+                currentKey = key;
+                currentArray = [];
+                continue;
+            }
             
             if (value.startsWith('[') && value.endsWith(']')) {
                 try {
@@ -92,6 +116,10 @@ class ContentService {
             } else {
                 result[key] = value;
             }
+        }
+        
+        if (currentKey && currentArray.length > 0) {
+            result[currentKey] = currentArray;
         }
         
         return result;
@@ -378,11 +406,11 @@ function setupIndexButtons() {
     });
 }
 
-// 打开当前项目的详情页
+// 打开当前项目的详情页（文章视图）
 function openCurrentProject() {
     const project = projectsData[currentProjectIndex];
     if (project && project.id) {
-        openProject(project.id);
+        openProject(project.id, 'article');
     }
 }
 

@@ -989,6 +989,14 @@ section {
     border-right: 1px solid rgba(74, 93, 62, 0.1);
     border-top: 1px solid rgba(74, 93, 62, 0.1);
     border-bottom: 1px solid rgba(74, 93, 62, 0.1);
+
+    /* --- 核心修改：固定高度 --- */
+    height: 135px;   
+    width: 280px;       /* 这里设定你想要的固定高度，例如 320px */
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    box-sizing: border-box; /* 确保 padding 不撑大容器 */
 }
 /* 档案卡边角装饰（对焦框） */
 .cases-narrative::before {
@@ -1894,7 +1902,7 @@ section {
                             <div class="bracket corner-tr"></div>
                             <div class="bracket corner-bl"></div>
                             <div class="bracket corner-br"></div>
-                            <button class="cases-detail-btn" id="viewDetailBtn" onclick="openCurrentProject()"></button>
+                            <button class="cases-detail-btn" id="viewDetailBtn" onclick="openCurrentProject(); event.stopPropagation();"></button>
                             <span class="cases-detail-text-hero">查看详情</span>
                             <span class="diamond-tag">REF.FUTURA</span>
                         </div>
