@@ -2,6 +2,11 @@
 // 这个文件由 scripts/generate-project-list.js 在运行 npm run dev 时自动生成
 import { projectFiles } from './projects-data.js';
 
+// GitHub Pages 部署配置
+// 仓库地址：https://github.com/JL-zukunft/Personal_Web.git
+// 部署地址：https://jl-zukunft.github.io/Personal_Web/
+const BASE_URL = 'Personal_Web';
+
 /**
  * 内容服务类 - 负责加载和解析 Markdown 项目文件
  * 
@@ -17,6 +22,21 @@ class ContentService {
         this.cache = new Map();
         // 存储项目列表数据
         this.projectList = null;
+        // 存储 BASE_URL
+        this.baseUrl = BASE_URL || '';
+    }
+
+    /**
+     * 获取完整的资源路径（兼容 BASE_URL）
+     * @param {string} path - 原始路径
+     * @returns {string} - 处理后的完整路径
+     */
+    getResourcePath(path) {
+        const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+        if (this.baseUrl) {
+            return `/${this.baseUrl}/${cleanPath}`;
+        }
+        return cleanPath;
     }
 
     /**
@@ -25,7 +45,9 @@ class ContentService {
      * @returns {Promise<string>} - 文件内容
      */
     async fetchMarkdown(filePath) {
-        const cacheKey = filePath;
+        // 使用 getResourcePath 处理路径
+        const fullPath = this.getResourcePath(filePath);
+        const cacheKey = fullPath;
         
         // 如果缓存中有，直接返回，避免重复请求
         if (this.cache.has(cacheKey)) {
@@ -34,7 +56,7 @@ class ContentService {
 
         try {
             // 使用 fetch API 获取文件
-            const response = await fetch(filePath);
+            const response = await fetch(fullPath);
             
             // 如果请求失败，抛出错误
             if (!response.ok) {
@@ -160,7 +182,7 @@ class ContentService {
         for (const fileName of projectFiles) {
             try {
                 // 获取文件内容
-                const content = await this.fetchMarkdown(`/content/projects/${fileName}`);
+                const content = await this.fetchMarkdown(`content/projects/${fileName}`);
                 // 解析 frontmatter
                 const { metadata } = this.parseFrontmatter(content);
                 
@@ -186,7 +208,7 @@ class ContentService {
      * @returns {Promise<object>} - 项目详情对象
      */
     async getProjectById(projectId) {
-        const filePath = `/content/projects/${projectId}.md`;
+        const filePath = `content/projects/${projectId}.md`;
         
         try {
             // 获取文件内容

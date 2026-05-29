@@ -2,7 +2,6 @@
 // ⚠️ 重要：根据实际部署情况修改 BASE_URL
 // 仓库地址：https://github.com/JL-zukunft/Personal_Web.git
 // 部署地址：https://jl-zukunft.github.io/Personal_Web/
-// 由于部署在仓库根目录，BASE_URL 设为空字符串
 const BASE_URL = 'Personal_Web';
 
 // 内容服务类
@@ -28,16 +27,16 @@ class ContentService {
     }
 
     async fetchMarkdown(filePath) {
-        // 使用相对路径，确保跨环境兼容
-        const relativePath = filePath.startsWith('/') ? filePath.substring(1) : filePath;
-        const cacheKey = relativePath;
+        // 使用 getResourcePath 方法处理路径，确保 BASE_URL 生效
+        const fullPath = this.getResourcePath(filePath);
+        const cacheKey = fullPath;
         
         if (this.cache.has(cacheKey)) {
             return this.cache.get(cacheKey);
         }
 
         try {
-            const response = await fetch(relativePath);
+            const response = await fetch(fullPath);
             if (!response.ok) {
                 throw new Error(`Failed to fetch ${filePath}: ${response.status}`);
             }
@@ -277,19 +276,18 @@ async function loadPreviewImage(project) {
     async function loadImageFromPath(imagePath, projectId) {
         const possiblePaths = [
             imagePath,
-            `/content/projects/${projectId}/${imagePath}`,
-            `/content/projects/attachments/${imagePath}`,
-            `/content/projects/${projectId}/attachments/${imagePath}`,
-            `/attachments/${imagePath}`,
-            `/content/projects/${imagePath}`
+            `content/projects/${projectId}/${imagePath}`,
+            `content/projects/attachments/${imagePath}`,
+            `content/projects/${projectId}/attachments/${imagePath}`,
+            `attachments/${imagePath}`,
+            `content/projects/${imagePath}`
         ];
         
         for (const path of possiblePaths) {
-            if (path.startsWith('/')) {
-                const success = await tryLoadImage(path);
-                if (success) {
-                    return;
-                }
+            const fullPath = contentService.getResourcePath(path);
+            const success = await tryLoadImage(fullPath);
+            if (success) {
+                return;
             }
         }
         previewImage.classList.add('error');
