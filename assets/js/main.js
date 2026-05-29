@@ -1,10 +1,9 @@
 // GitHub Pages 部署配置
 // ⚠️ 重要：根据实际部署情况修改 BASE_URL
-// 如果部署到子目录（如 https://username.github.io/repo-name/），
-// 需要将 BASE_URL 设置为 'repo-name'（不带斜杠）
-// 如果部署到根目录（如 https://username.github.io/），
-// 将 BASE_URL 设置为 ''（空字符串）
-const BASE_URL = 'https://jl-zukunft.github.io/Futura_html/';
+// 仓库地址：https://github.com/JL-zukunft/Personal_Web.git
+// 部署地址：https://jl-zukunft.github.io/Personal_Web/
+// 由于部署在仓库根目录，BASE_URL 设为空字符串
+const BASE_URL = 'Personal_Web';
 
 // 内容服务类
 class ContentService {
