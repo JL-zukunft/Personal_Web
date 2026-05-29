@@ -1,9 +1,11 @@
 .nav {
   background-color: transparent;
-  position: sticky;
+  position: fixed; /* 改为fixed定位，不占据文档流空间 */
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
-  padding: 24px 64px 24px 64px;
+  padding: 24px 64px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -11,6 +13,7 @@
   margin: 0 auto;
   width: 100%;
   overflow: visible;
+  box-sizing: border-box;
 }
 
 .nav-logo-container {

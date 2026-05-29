@@ -2,9 +2,10 @@
   height: 100%;
   display: grid;
   grid-template-columns: 1fr 1.2fr;
-  gap: 3rem;
+  gap: 2rem;
   align-items: center;
-  padding: 1rem 0 3rem;
+  padding: 0 48px 24px;
+  box-sizing: border-box;
 }
 
 .hero-left {
@@ -97,7 +98,8 @@
 .hero-timeline {
   grid-column: 1 / -1;
   width: 100%;
-  padding-top: 1rem;
+  padding-top: 0.5rem;
+  box-sizing: border-box;
 }
 
 .timeline {
