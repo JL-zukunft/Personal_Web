@@ -1,32 +1,44 @@
-// 项目文件列表（自动生成）
-const projectFiles = [
-    "2026-03-02-data-analytics.md",
-    "2026-05-01-peronal-aihtml.md",
-    "2026-08-04-smart-home.md",
-    "2026-11-03-smart-customer.md",
-    "2026-12-99-test-project.md",
-    "2026-12-99-test-project 2.md",
-    "2026-12-99-test-project3.md",
-    "2026-12-99-test-project 4.md",
-    "2026-12-99-test-project 5.md",
-    "2026-12-99-test-project 6.md"
-];
+// GitHub Pages 部署配置
+// ⚠️ 重要：根据实际部署情况修改 BASE_URL
+// 如果部署到子目录（如 https://username.github.io/repo-name/），
+// 需要将 BASE_URL 设置为 'repo-name'（不带斜杠）
+// 如果部署到根目录（如 https://username.github.io/），
+// 将 BASE_URL 设置为 ''（空字符串）
+const BASE_URL = 'https://jl-zukunft.github.io/Futura_html/';
 
 // 内容服务类
 class ContentService {
     constructor() {
         this.cache = new Map();
         this.projectList = null;
+        this.baseUrl = BASE_URL || '';
+    }
+
+    // 获取完整的资源路径（兼容相对路径）
+    getResourcePath(path) {
+        // 移除路径开头的斜杠
+        const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+        
+        // 如果已有 baseUrl，直接返回带 baseUrl 的路径
+        if (this.baseUrl) {
+            return `/${this.baseUrl}/${cleanPath}`;
+        }
+        
+        // 否则返回相对路径（用于本地测试）
+        return cleanPath;
     }
 
     async fetchMarkdown(filePath) {
-        const cacheKey = filePath;
+        // 使用相对路径，确保跨环境兼容
+        const relativePath = filePath.startsWith('/') ? filePath.substring(1) : filePath;
+        const cacheKey = relativePath;
+        
         if (this.cache.has(cacheKey)) {
             return this.cache.get(cacheKey);
         }
 
         try {
-            const response = await fetch(filePath);
+            const response = await fetch(relativePath);
             if (!response.ok) {
                 throw new Error(`Failed to fetch ${filePath}: ${response.status}`);
             }
@@ -134,7 +146,8 @@ class ContentService {
 
         for (const fileName of projectFiles) {
             try {
-                const content = await this.fetchMarkdown(`/content/projects/${fileName}`);
+                // 使用相对路径加载项目
+                const content = await this.fetchMarkdown(`content/projects/${fileName}`);
                 const { metadata } = this.parseFrontmatter(content);
                 
                 projects.push({
@@ -148,6 +161,25 @@ class ContentService {
 
         this.projectList = projects.sort((a, b) => (a.order || 999) - (b.order || 999));
         return this.projectList;
+    }
+
+    async getProjectById(projectId) {
+        // 使用相对路径加载项目详情
+        const filePath = `content/projects/${projectId}.md`;
+        
+        try {
+            const content = await this.fetchMarkdown(filePath);
+            const { metadata, content: markdownContent } = this.parseFrontmatter(content);
+            
+            return {
+                id: projectId,
+                ...metadata,
+                content: markdownContent
+            };
+        } catch (error) {
+            console.warn(`Failed to load project: ${projectId}`, error);
+            return null;
+        }
     }
 }
 
@@ -227,6 +259,116 @@ function switchProject(index) {
     animateContentTransition();
 }
 
+// 加载预览图片 - 从项目内容中提取第一张图片
+async function loadPreviewImage(project) {
+    const previewImage = document.getElementById('previewImage');
+    const previewImageLabel = document.getElementById('previewImageLabel');
+    
+    if (!previewImage) return;
+    
+    // 重置图片状态
+    previewImage.classList.remove('loaded', 'error');
+    previewImage.src = '';
+    
+    if (previewImageLabel) {
+        previewImageLabel.textContent = project.title || '项目预览';
+    }
+    
+    // 图片加载辅助函数
+    async function loadImageFromPath(imagePath, projectId) {
+        const possiblePaths = [
+            imagePath,
+            `/content/projects/${projectId}/${imagePath}`,
+            `/content/projects/attachments/${imagePath}`,
+            `/content/projects/${projectId}/attachments/${imagePath}`,
+            `/attachments/${imagePath}`,
+            `/content/projects/${imagePath}`
+        ];
+        
+        for (const path of possiblePaths) {
+            if (path.startsWith('/')) {
+                const success = await tryLoadImage(path);
+                if (success) {
+                    return;
+                }
+            }
+        }
+        previewImage.classList.add('error');
+        
+        async function tryLoadImage(fullPath) {
+            return new Promise((resolve) => {
+                const tempImage = new Image();
+                tempImage.onload = () => {
+                    previewImage.src = fullPath;
+                    previewImage.classList.add('loaded');
+                    resolve(true);
+                };
+                tempImage.onerror = () => {
+                    resolve(false);
+                };
+                tempImage.src = fullPath;
+            });
+        }
+    }
+    
+    // 图片提取辅助函数
+    function extractFirstImageUrl(htmlContent) {
+        const obsidianRegex = /!\[\[([^\]|]+)(?:\|[^\]]*)?\]\]/gi;
+        let obsidianMatch;
+        while ((obsidianMatch = obsidianRegex.exec(htmlContent)) !== null) {
+            const matchedPath = obsidianMatch[1];
+            if (isValidImagePath(matchedPath)) {
+                return matchedPath;
+            }
+        }
+        
+        const imgTagRegex = /<img[^>]*src=["']([^"']+)["'][^>]*>/i;
+        const imgMatch = htmlContent.match(imgTagRegex);
+        if (imgMatch && imgMatch[1] && isValidImagePath(imgMatch[1])) {
+            return imgMatch[1];
+        }
+        
+        const mdImageRegex = /!\[([^\]]*)\]\(([^)]+)\)/i;
+        const mdMatch = htmlContent.match(mdImageRegex);
+        if (mdMatch && mdMatch[2] && isValidImagePath(mdMatch[2])) {
+            return mdMatch[2];
+        }
+        
+        return null;
+        
+        function isValidImagePath(path) {
+            if (!path || typeof path !== 'string') return false;
+            const lowerPath = path.toLowerCase();
+            const validExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp'];
+            return validExtensions.some(ext => lowerPath.endsWith(ext));
+        }
+    }
+    
+    // 首先检查 frontmatter 中的图片字段
+    const frontmatterImage = project.cover || project.image || project.img || '';
+    if (frontmatterImage) {
+        await loadImageFromPath(frontmatterImage, project.id);
+        return;
+    }
+    
+    // 如果 frontmatter 中没有图片，从项目内容中提取
+    try {
+        const projectContent = await contentService.getProjectById(project.id);
+        if (projectContent && projectContent.content) {
+            const imageUrl = extractFirstImageUrl(projectContent.content);
+            if (imageUrl) {
+                await loadImageFromPath(imageUrl, project.id);
+                return;
+            }
+        }
+    } catch (error) {
+        console.warn('Failed to extract image from project content:', error);
+    }
+    
+    // 没有找到图片
+    previewImage.classList.add('error');
+}
+
 // 加载项目详情
 function loadProjectDetail(index) {
     const project = projectsData[index];
@@ -251,31 +393,8 @@ function loadProjectDetail(index) {
         previewNumber.textContent = String(index + 1).padStart(2, '0');
     }
 
-    // 更新Minimap标题
-    const minimapTitle = document.getElementById('casesMinimapTitle');
-    if (minimapTitle) {
-        minimapTitle.textContent = project.title || '项目导航';
-    }
-
-    // 更新Minimap节点
-    const minimapGrid = document.getElementById('casesMinimapGrid');
-    if (minimapGrid) {
-        const minimapNodes = project.minimap || [
-            { icon: "📋", label: "项目背景" },
-            { icon: "🎯", label: "设计目标" },
-            { icon: "💡", label: "设计亮点" },
-            { icon: "⚙️", label: "技术栈" },
-            { icon: "👤", label: "我的角色" },
-            { icon: "🚀", label: "项目成果" }
-        ];
-        
-        minimapGrid.innerHTML = minimapNodes.map((node, idx) => `
-            <div class="cases-minimap-node">
-                <span class="cases-minimap-node-icon">${node.icon}</span>
-                <span class="cases-minimap-node-label">${node.label}</span>
-            </div>
-        `).join('');
-    }
+    // 更新预览图片 - 从项目内容中提取
+    loadPreviewImage(project);
 
     // 更新项目标签
     const projectTags = document.getElementById('casesProjectTags');

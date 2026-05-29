@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Space+Mono:wght@400;700&family=Syne:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/main.css">
     <!-- 引入 Font Awesome 图标库 -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script>
@@ -494,6 +494,62 @@ section {
     overflow: hidden;
 }
 
+/* 图片展示容器 */
+.preview-image-container {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(247, 247, 245, 0.5);
+    z-index: 0;
+    overflow: hidden;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.preview-image-container:hover {
+    opacity: 0.95;
+}
+
+.preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.4s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.preview-image.loaded {
+    opacity: 1;
+}
+
+.preview-image.error {
+    opacity: 0.3;
+    filter: grayscale(50%);
+}
+
+.preview-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(74, 93, 62, 0.1) 0%, transparent 50%, rgba(74, 93, 62, 0.05) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.preview-overlay-label {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sage);
+    opacity: 0.6;
+    letter-spacing: 0.08em;
+}
+
 /* 点阵背景 */
 .preview-grid {
     position: absolute;
@@ -768,49 +824,6 @@ section {
 }
 
 /* 预览详情按钮 */
-.preview-detail-btn {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    background: rgba(74, 93, 62, 0.06);
-    border: 1.5px solid rgba(74, 93, 62, 0.3);
-    border-radius: 16px;
-    cursor: pointer;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--sage);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    transition: all 0.25s ease;
-    opacity: 0;
-}
-
-.cases-preview-card:hover .preview-detail-btn {
-    opacity: 1;
-}
-
-.preview-detail-btn:hover {
-    background: var(--sage);
-    border-color: var(--sage);
-    color: #fff;
-    transform: translateX(3px);
-}
-
-.btn-arrow {
-    font-size: 11px;
-    transition: transform 0.25s ease;
-}
-
-.preview-detail-btn:hover .btn-arrow {
-    transform: translateX(2px);
-}
-
 /* 项目标题英雄区 */
 .cases-project-hero {
     padding: 12px 30px 0 30px;
@@ -823,13 +836,15 @@ section {
 .cases-project-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
-    gap: 12px;
+    align-items: flex-start;
+    gap: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .cases-project-title-section {
     flex: 1;
-    min-width: 0;
+    min-width: 280px;
+    min-width: clamp(280px, 50%, 600px);
 }
 
 .cases-project-index-label {
@@ -848,20 +863,24 @@ section {
     font-weight: 900;
     color: var(--ink);
     letter-spacing: -0.03em;
-    line-height: 1.05;
+    line-height: 1.1;
     margin: 6px 0 0 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .cases-project-tags {
+    display: -ms-flexbox;
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    align-items: flex-start;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: wrap-reverse;
+    flex-wrap: wrap-reverse;
+    -ms-flex-align: flex-end;
+    align-items: flex-end;
+    -ms-flex-pack: flex-end;
     justify-content: flex-end;
-    flex-shrink: 0;
+    gap: 0.5rem;
+    max-width: 45%;
+    flex-shrink: 1;
 }
 
 .cases-project-tag {
@@ -1752,27 +1771,25 @@ section {
 </head>
 <body>
     <div class="bg-watermark-container">
-    <img src="styles/components/futura_logo2.png" alt="" class="bg-watermark-img">
+    <img src="../styles/components/futura_logo2.png" alt="" class="bg-watermark-img">
     </div>
     <!-- 鼠标跟随光晕 -->
     <div class="cursor-glow" id="cursorGlow"></div>
     
     <nav class="nav">
         <div class="nav-logo-container">
-            <img src="styles/components/futura_logo2.png" alt="FUTURA" class="nav-logo" onclick="navigateToSection(0)">
+            <img src="../styles/components/futura_logo2.png" alt="FUTURA" class="nav-logo" onclick="navigateToSection(0)">
         </div>
         <div class="nav-divider"></div>
         <div class="nav-links">
             <a href="javascript:void(0)" class="nav-link active" onclick="navigateToSection(0);">首页</a>
             <a href="javascript:void(0)" class="nav-link" onclick="navigateToSection(1);">项目</a>
             <a href="javascript:void(0)" class="nav-link" onclick="navigateToSection(2);">联系</a>
-            <div class="nav-controls">
-                <a href="../easyfolio-ai/index.html" class="btn-primary">AI分析</a>
-                <div class="hamburger" onclick="toggleMobileMenu()">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
             </div>
         </div>
     </nav>
@@ -1783,7 +1800,6 @@ section {
             <a href="javascript:void(0)" class="mobile-nav-link" onclick="navigateToSection(0); closeMobileMenu();">首页</a>
             <a href="javascript:void(0)" class="mobile-nav-link" onclick="navigateToSection(1); closeMobileMenu();">项目</a>
             <a href="javascript:void(0)" class="mobile-nav-link" onclick="navigateToSection(2); closeMobileMenu();">联系</a>
-        <a href="../easyfolio-ai/index.html" class="mobile-nav-link">AI分析</a>
     </div>
 
     <main>
@@ -1804,11 +1820,11 @@ section {
                     </span>
                 </div>
                 <div class="hero-cta">
-                    <button class="btn-primary" onclick="scrollToSection('cases')">
+                    <button class="btn-primary" onclick="navigateToSection(1)">
                         <i class="fas fa-arrow-right"></i>
                         查看项目
                     </button>
-                    <button class="btn-outline" onclick="scrollToSection('contact')">
+                    <button class="btn-outline" onclick="navigateToSection(2)">
                         <i class="fas fa-user"></i>
                         联系我
                     </button>
@@ -1923,91 +1939,27 @@ section {
                         <!-- 交互层 -->
                         <div class="preview-interactive" id="previewInteractive">
                             <div class="preview-canvas">
-
-                                <!-- 点阵背景 -->
-                                <div class="preview-grid"></div>
-
-                                <!-- SVG 连接线 -->
-                                <svg class="preview-conn" viewBox="0 0 100 100" preserveAspectRatio="none">
-                                    <line x1="50" y1="50" x2="20" y2="30" stroke="rgba(74,93,62,0.3)" stroke-width="0.5" stroke-dasharray="2,2"/>
-                                    <line x1="50" y1="50" x2="40" y2="18" stroke="rgba(74,93,62,0.3)" stroke-width="0.5" stroke-dasharray="2,2"/>
-                                    <line x1="50" y1="50" x2="80" y2="30" stroke="rgba(74,93,62,0.3)" stroke-width="0.5" stroke-dasharray="2,2"/>
-                                    <line x1="50" y1="50" x2="20" y2="70" stroke="rgba(74,93,62,0.3)" stroke-width="0.5" stroke-dasharray="2,2"/>
-                                    <line x1="50" y1="50" x2="80" y2="70" stroke="rgba(74,93,62,0.3)" stroke-width="0.5" stroke-dasharray="2,2"/>
-                                    <line x1="20" y1="30" x2="40" y2="18" stroke="rgba(74,93,62,0.15)" stroke-width="0.3" stroke-dasharray="1.5,2"/>
-                                    <line x1="40" y1="18" x2="80" y2="30" stroke="rgba(74,93,62,0.15)" stroke-width="0.3" stroke-dasharray="1.5,2"/>
-                                    <circle cx="20" cy="30" r="1.5" fill="rgba(74,93,62,0.35)"/>
-                                    <circle cx="40" cy="18" r="1.5" fill="rgba(74,93,62,0.35)"/>
-                                    <circle cx="80" cy="30" r="1.5" fill="rgba(74,93,62,0.35)"/>
-                                    <circle cx="20" cy="70" r="1.5" fill="rgba(74,93,62,0.35)"/>
-                                    <circle cx="80" cy="70" r="1.5" fill="rgba(74,93,62,0.35)"/>
-                                </svg>
-
-                                <!-- 阶段标注 -->
-                                <div class="preview-phase-label" style="left:5%;top:25%">RESEARCH</div>
-                                <div class="preview-phase-label" style="left:48%;top:10%">DEFINITION</div>
-                                <div class="preview-phase-label" style="left:88%;top:25%">DESIGN</div>
-                                <div class="preview-phase-label" style="left:5%;top:65%">IMPLEMENTATION</div>
-                                <div class="preview-phase-label" style="left:88%;top:65%">OUTPUT</div>
-
-                                <!-- 章节节点 -->
-                                <div class="preview-node" data-phase="research" data-section="background" style="left:20%;top:30%">
-                                    <span class="preview-node-phase">Phase 01</span>
-                                    <span class="preview-node-label">项目背景</span>
-                                    <span class="preview-node-title">研究与分析</span>
-                                    <span class="preview-node-desc">用户调研与需求分析</span>
-                                    <span class="preview-node-enter">→</span>
+                                <!-- 图片展示区域 -->
+                                <div class="preview-image-container" onclick="openProjectDetailArticle();">
+                                    <img 
+                                        id="previewImage" 
+                                        class="preview-image" 
+                                        src="" 
+                                        alt="项目预览"
+                                        loading="lazy"
+                                    />
+                                    <div class="preview-image-overlay">
+                                        <span class="preview-overlay-label" id="previewImageLabel">项目预览</span>
+                                    </div>
                                 </div>
-                                <div class="preview-node" data-phase="research" data-section="objectives" style="left:40%;top:18%">
-                                    <span class="preview-node-phase">Phase 02</span>
-                                    <span class="preview-node-label">设计目标</span>
-                                    <span class="preview-node-title">目标设定</span>
-                                    <span class="preview-node-desc">明确设计方向</span>
-                                    <span class="preview-node-enter">→</span>
-                                </div>
-                                <div class="preview-node" data-section="process" style="left:80%;top:30%">
-                                    <span class="preview-node-phase">Phase 03</span>
-                                    <span class="preview-node-label">设计过程</span>
-                                    <span class="preview-node-title">方案探索</span>
-                                    <span class="preview-node-desc">迭代与优化</span>
-                                    <span class="preview-node-enter">→</span>
-                                </div>
-                                <div class="preview-node" data-section="solution" style="left:20%;top:70%">
-                                    <span class="preview-node-phase">Phase 04</span>
-                                    <span class="preview-node-label">解决方案</span>
-                                    <span class="preview-node-title">最终方案</span>
-                                    <span class="preview-node-desc">落地与实施</span>
-                                    <span class="preview-node-enter">→</span>
-                                </div>
-                                <div class="preview-node" data-phase="output" data-section="outcomes" style="left:80%;top:70%">
-                                    <span class="preview-node-phase">Phase 05</span>
-                                    <span class="preview-node-label">项目成果</span>
-                                    <span class="preview-node-title">成果展示</span>
-                                    <span class="preview-node-desc">效果与反思</span>
-                                    <span class="preview-node-enter">→</span>
-                                </div>
-
-                                <!-- 中央主节点 -->
-                                <div class="preview-node-center" style="left:50%;top:50%">
-                                    <span class="preview-center-label" id="casesPreviewNumber">01</span>
-                                    <span class="preview-center-title" id="previewCenterTitle">项目名称</span>
-                                    <span class="preview-center-sub">点击跳转详情</span>
-                                </div>
-
                             </div>
                         </div>
                         
                         <!-- 操作提示 -->
                         <div class="preview-hint">
                             <span class="hint-icon">🖱️</span>
-                            <span class="hint-text">长按拖动 | Ctrl+滚轮缩放 | 点击跳转地图视图</span>
+                            <span class="hint-text">点击预览图跳转详情</span>
                         </div>
-                        
-                        <!-- 查看详情按钮 -->
-                        <button class="preview-detail-btn" onclick="openProjectDetailArticle(); event.stopPropagation();">
-                            <span>查看详情</span>
-                            <span class="btn-arrow">→</span>
-                        </button>
                     </div>
 
                     <!-- 项目标题英雄区 -->
@@ -2052,7 +2004,7 @@ section {
             </a>
 
             <!-- Github 按钮：更新链接 -->
-            <a href="https://github.com/JL-zukunft/Futura_CV.git" target="_blank" class="contact-card">
+            <a href="https://github.com/JL-zukunft/Futura_html.git" target="_blank" class="contact-card">
                 <i class="fab fa-github"></i>
                 <span>Github</span>
             </a>
@@ -2061,7 +2013,7 @@ section {
 </section>
     </main>
 
-    <script type="text/javascript" src="/assets/js/main.js"></script>
+    <script type="text/javascript" src="assets/js/main.js"></script>
    <script>
     // 鼠标跟随光晕效果
     (function() {

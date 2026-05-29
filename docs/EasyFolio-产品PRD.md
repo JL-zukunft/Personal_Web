@@ -1,4 +1,4 @@
-# EasyFolio - 产品PRD
+# EasyFolio - 产品PRD初版
 
 ## 1. 产品概述
 

@@ -375,6 +375,7 @@
       flex-shrink:0;width:var(--nav-w);height:100%;
       background:var(--cream);border-right:2px dashed rgba(74,93,62,.22);
       display:flex;flex-direction:column;overflow:hidden;
+      box-sizing:border-box;
     }
     .nav-hdr{
       flex-shrink:0;padding:14px 14px 10px;
@@ -398,7 +399,7 @@
     .nav-item.active .nav-dot{background:var(--sage);border-color:var(--sage);}
     .nav-item:hover .nav-dot{border-color:var(--sage);}
 
-    .nav-name{flex:1;font-family:var(--font-body);font-size:14.5px;font-weight:400;color:var(--ink-lt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .2s;}
+    .nav-name{flex:1;font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--ink-lt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .2s;}
     .nav-item.active .nav-name{color:var(--sage);font-weight:700;}
     .nav-prog{position:absolute;bottom:0;left:12px;right:8px;height:1px;background:rgba(74,93,62,.07);}
     .nav-prog-fill{height:100%;background:var(--sage);width:0%;transition:width .3s ease;}
@@ -415,11 +416,11 @@
     .nav-map-btn:hover{background:var(--sage-pale);border-color:var(--sage);border-style:solid;}
 
     /* ---- 右栏：文章 ---- */
-    .art-panel{flex:1;height:100%;overflow-y:auto;overflow-x:hidden;background:var(--cream);scrollbar-width:thin;scrollbar-color:var(--sage) transparent;user-select:text;}
+    .art-panel{flex:1;height:100%;overflow-y:auto;overflow-x:hidden;background:var(--cream);scrollbar-width:thin;scrollbar-color:var(--sage) transparent;user-select:text;box-sizing:border-box;}
     .art-panel::-webkit-scrollbar{width:4px;}
     .art-panel::-webkit-scrollbar-thumb{background:var(--sage);border-radius:2px;}
     .read-bar{position:sticky;top:0;left:0;width:0%;height:3px;background:linear-gradient(to right,var(--sage),var(--accent));z-index:50;transition:width .1s linear;}
-    .art-body{max-width:700px;margin:0 auto;padding:44px 48px 80px;}
+    .art-body{max-width:700px;margin:0 auto;padding:44px 48px 0;}
 
     /* ---- 文章内容组件 ---- */
     .art-section{padding-top:8px;padding-bottom:50px;scroll-margin-top:20px;}
@@ -609,8 +610,86 @@
       .h-tag{padding:2px 7px;font-size:8px;}
       .hdr-meta{padding:0 12px;}
       .hm-row{font-size:8px;}
-      .art-body{padding:32px 24px 60px;}
+      .art-body{padding:32px 24px 0;}
       .sec-title{font-size:19px;}
+      .project-nav-buttons{padding:24px 0 32px;}
+    }
+
+    /* ---- 项目导航按钮 ---- */
+    .project-nav-buttons {
+        display: flex;
+        gap: 16px;
+        padding: 24px 0 48px;
+        border-top: 1px dashed var(--border);
+        margin-top: 24px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        box-sizing: border-box;
+    }
+    
+    .nav-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px;
+        background: var(--white);
+        border: 1.5px dashed var(--border);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        text-align: left;
+    }
+    
+    .nav-btn:hover {
+        background: var(--sage-pale);
+        border-color: var(--sage);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(74, 93, 62, 0.15);
+    }
+    
+    .nav-btn-arrow {
+        font-family: var(--font-mono);
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--sage);
+        flex-shrink: 0;
+    }
+    
+    .nav-btn-content {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .nav-btn-label {
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 9px;
+        font-weight: 700;
+        color: var(--sage);
+        opacity: 0.6;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+    }
+    
+    .nav-btn-title {
+        display: block;
+        font-family: var(--font-body);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .nav-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
     }
 
     @media(max-width:560px){
@@ -721,7 +800,7 @@
 
 <!-- HEADER -->
 <header class="hdr">
-    <a href="/#cases" class="hdr-back map-mode" id="hdrBack">
+    <a href="/index.html#cases" class="hdr-back map-mode" id="hdrBack">
         <span class="ba">←</span>
         <span>返回项目列表</span>
     </a>
@@ -949,6 +1028,22 @@
             <article class="art-body" id="artBody">
                 <!-- 动态加载内容 -->
             </article>
+            <div class="project-nav-buttons" id="projectNavButtons">
+                <button class="nav-btn prev-btn" id="prevProjectBtn">
+                    <span class="nav-btn-arrow">←</span>
+                    <div class="nav-btn-content">
+                        <span class="nav-btn-label">上一个项目</span>
+                        <span class="nav-btn-title" id="prevProjectTitle">项目标题</span>
+                    </div>
+                </button>
+                <button class="nav-btn next-btn" id="nextProjectBtn">
+                    <div class="nav-btn-content">
+                        <span class="nav-btn-label">下一个项目</span>
+                        <span class="nav-btn-title" id="nextProjectTitle">项目标题</span>
+                    </div>
+                    <span class="nav-btn-arrow">→</span>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1799,11 +1894,15 @@ async function init() {
             const allChapters = [{ id: 'overview', title: '项目概览' }, ...(chapters.length > 0 ? chapters : [{ id: 'background', title: '项目背景' }])];
             updateNavigation(allChapters);
             renderMapNodes(chapters.length > 0 ? chapters : [{ id: 'background', title: '项目背景' }]);
+            
+            // 初始化项目导航按钮
+            initProjectNavButtons();
         }
     }
     
     updateHeader();
     
+    // 如果URL中指定了section，跳转到文章视图
     if (section) {
         if (projectData.sections[section]) {
             showArticleView(section);
@@ -1816,6 +1915,52 @@ async function init() {
     }
 }
 
+// 初始化项目导航按钮
+function initProjectNavButtons() {
+    const prevBtn = document.getElementById('prevProjectBtn');
+    const nextBtn = document.getElementById('nextProjectBtn');
+    const prevTitle = document.getElementById('prevProjectTitle');
+    const nextTitle = document.getElementById('nextProjectTitle');
+    
+    const currentIndex = projectFiles.indexOf(`${projectData.id}.md`);
+    const totalProjects = projectFiles.length;
+    
+    // 设置上一个项目
+    if (currentIndex > 0) {
+        const prevProjectId = projectFiles[currentIndex - 1].replace('.md', '');
+        contentService.getProjectById(prevProjectId).then(prevProject => {
+            if (prevProject) {
+                prevTitle.textContent = prevProject.title || '未命名项目';
+            }
+        });
+        
+        prevBtn.addEventListener('click', () => {
+            const prevId = projectFiles[currentIndex - 1].replace('.md', '');
+            window.location.href = `/project?id=${prevId}&section=background`;
+        });
+    } else {
+        prevBtn.disabled = true;
+        prevTitle.textContent = '没有上一个项目';
+    }
+    
+    // 设置下一个项目
+    if (currentIndex < totalProjects - 1) {
+        const nextProjectId = projectFiles[currentIndex + 1].replace('.md', '');
+        contentService.getProjectById(nextProjectId).then(nextProject => {
+            if (nextProject) {
+                nextTitle.textContent = nextProject.title || '未命名项目';
+            }
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            const nextId = projectFiles[currentIndex + 1].replace('.md', '');
+            window.location.href = `/project?id=${nextId}&section=background`;
+        });
+    } else {
+        nextBtn.disabled = true;
+        nextTitle.textContent = '没有下一个项目';
+    }
+}
 
 init();
 </script>

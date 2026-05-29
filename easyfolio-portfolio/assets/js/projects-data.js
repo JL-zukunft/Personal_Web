@@ -5,11 +5,5 @@ export const projectFiles = [
     "2026-03-02-data-analytics.md",
     "2026-05-01-peronal-aihtml.md",
     "2026-08-04-smart-home.md",
-    "2026-11-03-smart-customer.md",
-    "2026-12-99-test-project 2.md",
-    "2026-12-99-test-project 4.md",
-    "2026-12-99-test-project 5.md",
-    "2026-12-99-test-project 6.md",
-    "2026-12-99-test-project.md",
-    "2026-12-99-test-project3.md"
+    "2026-11-03-smart-customer.md"
 ];
