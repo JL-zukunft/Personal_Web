@@ -28,7 +28,7 @@
   --border: #d4d9cf;        /* 边框颜色 */
   --border-light: #e5e8e1;  /* 浅边框 */
   --white: #fdfcfa;         /* 白色 */
-  --accent: #2d5016;        /* 强调色 */
+  --accent: #e6bd81;        /* 强调色 */
 
   /* ========================================
      尺寸变量
@@ -49,9 +49,10 @@
   /* ========================================
      字体变量
      ======================================== */
-  --font-display: 'Syne', sans-serif;          /* 大标题字体 */
-  --font-sans: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;  /* 正文字体 */
-  --font-mono: 'Space Mono', monospace;        /* 等宽字体（代码用） */
+  --font-display: 'Inter', 'Syne', sans-serif;          /* 大标题字体 - 更现代科技感 */
+  --font-sans: 'Noto Sans SC', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;  /* 正文字体 */
+  --font-mono: 'JetBrains Mono', 'Space Mono', monospace;        /* 等宽字体（代码用）- 更现代 */
+  --font-tech: 'Inter', 'JetBrains Mono', sans-serif;   /* 科技感字体 */
 
   /* ========================================
      断点变量（响应式用）
