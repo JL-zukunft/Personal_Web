@@ -1050,6 +1050,8 @@
 </div>
 
 <script>
+const BASE_URL = 'Personal_Web';
+
 const projectFiles = [
     "2026-03-02-data-analytics.md",
     "2026-05-01-peronal-aihtml.md",
@@ -1067,16 +1069,26 @@ class ContentService {
     constructor() {
         this.cache = new Map();
         this.projectList = null;
+        this.baseUrl = BASE_URL || '';
+    }
+
+    getResourcePath(path) {
+        const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+        if (this.baseUrl) {
+            return `/${this.baseUrl}/${cleanPath}`;
+        }
+        return cleanPath;
     }
 
     async fetchMarkdown(filePath) {
-        const cacheKey = filePath;
+        const fullPath = this.getResourcePath(filePath);
+        const cacheKey = fullPath;
         if (this.cache.has(cacheKey)) {
             return this.cache.get(cacheKey);
         }
 
         try {
-            const response = await fetch(filePath);
+            const response = await fetch(fullPath);
             if (!response.ok) {
                 throw new Error(`Failed to fetch ${filePath}: ${response.status}`);
             }
@@ -1179,7 +1191,7 @@ class ContentService {
         for (const fileName of projectFiles) {
             const id = fileName.replace('.md', '');
             if (id === projectId) {
-                const content = await this.fetchMarkdown(`/content/projects/${fileName}`);
+                const content = await this.fetchMarkdown(`content/projects/${fileName}`);
                 const { metadata, content: markdownContent } = this.parseFrontmatter(content);
                 return {
                     id: id,
@@ -1201,7 +1213,7 @@ class ContentService {
             // --- 新增：处理 Obsidian 图片引用语法 ![[filename.png]] ---
     // 将 ![[图片名.png]] 转换为标准 <img src="路径/图片名.png">
     chContent = chContent.replace(/!\[\[(.*?)\]\]/g, (match, filename) => {
-        const imagePath = `/content/projects/attachments/${filename.trim()}`;
+        const imagePath = `/${BASE_URL}/content/projects/attachments/${filename.trim()}`;
         return `<img src="${imagePath}" class="art-img" alt="${filename}" loading="lazy">`;
     });
             
@@ -1338,7 +1350,7 @@ class ContentService {
 
         for (const fileName of projectFiles) {
             try {
-                const content = await this.fetchMarkdown(`/content/projects/${fileName}`);
+                const content = await this.fetchMarkdown(`content/projects/${fileName}`);
                 const { metadata } = this.parseFrontmatter(content);
                 
                 projects.push({
