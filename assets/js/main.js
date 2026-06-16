@@ -4,13 +4,7 @@
 // 部署地址：https://jl-zukunft.github.io/Personal_Web/
 const BASE_URL = 'Personal_Web';
 
-// 项目文件列表（与 projects-data.js 保持同步）
-const projectFiles = [
-    "2026-03-02-data-analytics.md",
-    "2026-05-01-peronal-aihtml.md",
-    "2026-08-04-smart-home.md",
-    "2026-11-03-smart-customer.md"
-];
+import { projectFiles } from './projects-data.js';
 
 // 内容服务类
 class ContentService {
