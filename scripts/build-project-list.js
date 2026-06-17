@@ -17,7 +17,7 @@ const files = fs.readdirSync(projectsDir)
 
 const content = `// 自动生成 — 请勿手动编辑，由 scripts/build-project-list.js 生成
 // 生成时间: ${new Date().toISOString()}
-const projectFiles = ${JSON.stringify(files, null, 2)};
+window.projectFiles = ${JSON.stringify(files, null, 2)};
 `;
 
 fs.writeFileSync(outputFile, content, 'utf-8');
