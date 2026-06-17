@@ -2,8 +2,8 @@
 // Do not edit manually
 
 export const projectFiles = [
-    "2026-03-02-data-analytics.md",
     "2026-05-01-peronal-aihtml.md",
+    "2026-05-20-yysls-deal.md",
     "2026-08-04-smart-home.md",
     "2026-11-03-smart-customer.md"
 ];
