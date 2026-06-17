@@ -2,13 +2,38 @@
 // 自动检测：GitHub Pages 上加前缀，本地测试用相对路径
 const BASE_URL = window.location.hostname === 'jl-zukunft.github.io' ? 'Personal_Web' : '';
 
-// 项目文件列表（增删项目时同步更新此处和 assets/js/projects-data.js）
-const projectFiles = [
-    "2026-03-02-data-analytics.md",
+// 硬编码列表作为备用（降级方案）
+const fallbackProjectFiles = [
     "2026-05-01-peronal-aihtml.md",
+    "2026-05-20-yysls-deal.md",
     "2026-08-04-smart-home.md",
     "2026-11-03-smart-customer.md"
 ];
+
+// 动态获取项目列表
+let projectFiles = fallbackProjectFiles; // 默认使用备用列表
+
+// 尝试通过 GitHub API 动态获取项目列表
+async function fetchProjectFilesFromGitHub() {
+    try {
+        const repoUrl = 'https://api.github.com/repos/JL-zukunft/Personal_Web/contents/content/projects';
+        const response = await fetch(repoUrl);
+        
+        if (response.ok) {
+            const files = await response.json();
+            const mdFiles = files
+                .filter(file => file.type === 'file' && file.name.endsWith('.md') && file.name !== 'README.md')
+                .map(file => file.name)
+                .sort();
+            if (mdFiles.length > 0) {
+                projectFiles = mdFiles;
+                console.log('✅ 动态获取项目列表成功:', projectFiles);
+            }
+        }
+    } catch (error) {
+        console.log('⚠️ 无法动态获取项目列表，使用备用列表:', error.message);
+    }
+}
 
 // 内容服务类
 class ContentService {
@@ -191,7 +216,8 @@ class ContentService {
 const contentService = new ContentService();
 
 // 页面加载完成后执行初始化操作
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    await fetchProjectFilesFromGitHub();
     loadProjects();
     setupScrollAnimation();
     setupNavHighlight();
