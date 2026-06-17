@@ -1050,45 +1050,9 @@
 
 </div>
 
+<script src="assets/js/project-list.js"></script>
 <script>
-// 与 main.js 保持同步
 const BASE_URL = window.location.hostname === 'jl-zukunft.github.io' ? 'Personal_Web' : '';
-
-// 硬编码列表作为备用（降级方案）
-const fallbackProjectFiles = [
-    "2026-05-01-peronal-aihtml.md",
-    "2026-05-20-yysls-deal.md",
-    "2026-08-04-smart-home.md",
-    "2026-11-03-smart-customer.md"
-];
-
-// 动态获取项目列表
-let projectFiles = fallbackProjectFiles; // 默认使用备用列表
-
-// 尝试通过 GitHub API 动态获取项目列表
-async function fetchProjectFilesFromGitHub() {
-    try {
-        const repoUrl = 'https://api.github.com/repos/JL-zukunft/Personal_Web/contents/content/projects';
-        const response = await fetch(repoUrl);
-        
-        if (response.ok) {
-            const files = await response.json();
-            const mdFiles = files
-                .filter(file => file.type === 'file' && file.name.endsWith('.md') && file.name !== 'README.md')
-                .map(file => file.name)
-                .sort();
-            if (mdFiles.length > 0) {
-                projectFiles = mdFiles;
-                console.log('✅ 动态获取项目列表成功:', projectFiles);
-            }
-        }
-    } catch (error) {
-        console.log('⚠️ 无法动态获取项目列表，使用备用列表:', error.message);
-    }
-}
-
-// 页面加载时尝试动态获取
-fetchProjectFilesFromGitHub();
 
 class ContentService {
     constructor() {
@@ -2008,13 +1972,7 @@ function initProjectNavButtons() {
     }
 }
 
-// 异步初始化：先获取项目列表，再初始化页面
-async function startInit() {
-    await fetchProjectFilesFromGitHub();
-    init();
-}
-
-startInit();
+init();
 </script>
 </body>
 </html>

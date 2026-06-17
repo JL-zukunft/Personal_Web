@@ -2,37 +2,10 @@
 // 自动检测：GitHub Pages 上加前缀，本地测试用相对路径
 const BASE_URL = window.location.hostname === 'jl-zukunft.github.io' ? 'Personal_Web' : '';
 
-// 硬编码列表作为备用（降级方案）
-const fallbackProjectFiles = [
-    "2026-05-01-peronal-aihtml.md",
-    "2026-05-20-yysls-deal.md",
-    "2026-08-04-smart-home.md",
-    "2026-11-03-smart-customer.md"
-];
-
-// 动态获取项目列表
-let projectFiles = fallbackProjectFiles; // 默认使用备用列表
-
-// 尝试通过 GitHub API 动态获取项目列表
-async function fetchProjectFilesFromGitHub() {
-    try {
-        const repoUrl = 'https://api.github.com/repos/JL-zukunft/Personal_Web/contents/content/projects';
-        const response = await fetch(repoUrl);
-        
-        if (response.ok) {
-            const files = await response.json();
-            const mdFiles = files
-                .filter(file => file.type === 'file' && file.name.endsWith('.md') && file.name !== 'README.md')
-                .map(file => file.name)
-                .sort();
-            if (mdFiles.length > 0) {
-                projectFiles = mdFiles;
-                console.log('✅ 动态获取项目列表成功:', projectFiles);
-            }
-        }
-    } catch (error) {
-        console.log('⚠️ 无法动态获取项目列表，使用备用列表:', error.message);
-    }
+// projectFiles 由 assets/js/project-list.js 在页面加载时注入（构建时自动生成）
+// 若未加载则给出警告，不应在正常部署中发生
+if (typeof projectFiles === 'undefined') {
+    console.warn('⚠️ project-list.js 未加载，请检查构建流程');
 }
 
 // 内容服务类
@@ -216,8 +189,7 @@ class ContentService {
 const contentService = new ContentService();
 
 // 页面加载完成后执行初始化操作
-document.addEventListener('DOMContentLoaded', async function() {
-    await fetchProjectFilesFromGitHub();
+document.addEventListener('DOMContentLoaded', function() {
     loadProjects();
     setupScrollAnimation();
     setupNavHighlight();

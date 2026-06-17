@@ -47,12 +47,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
 
-      - name: Install dependencies
-        run: |
-          cd easyfolio-portfolio
-          npm ci
+      - name: Generate project list
+        run: node scripts/build-project-list.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -60,7 +57,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'easyfolio-portfolio'
+          path: '.'
 
       - name: Deploy to GitHub Pages
         id: deployment
