@@ -1,10 +1,14 @@
 // GitHub Pages 部署配置
-// ⚠️ 重要：根据实际部署情况修改 BASE_URL
-// 仓库地址：https://github.com/JL-zukunft/Personal_Web.git
-// 部署地址：https://jl-zukunft.github.io/Personal_Web/
-const BASE_URL = 'Personal_Web';
+// 自动检测：GitHub Pages 上加前缀，本地测试用相对路径
+const BASE_URL = window.location.hostname === 'jl-zukunft.github.io' ? 'Personal_Web' : '';
 
-import { projectFiles } from './projects-data.js';
+// 项目文件列表（增删项目时同步更新此处和 assets/js/projects-data.js）
+const projectFiles = [
+    "2026-03-02-data-analytics.md",
+    "2026-05-01-peronal-aihtml.md",
+    "2026-08-04-smart-home.md",
+    "2026-11-03-smart-customer.md"
+];
 
 // 内容服务类
 class ContentService {
