@@ -1185,7 +1185,7 @@ class ContentService {
         for (const fileName of projectFiles) {
             const id = fileName.replace('.md', '');
             if (id === projectId) {
-                const content = await this.fetchMarkdown(`/content/projects/${fileName}`);
+                const content = await this.fetchMarkdown(`content/projects/${fileName}`);
                 const { metadata, content: markdownContent } = this.parseFrontmatter(content);
                 return {
                     id: id,
@@ -1344,7 +1344,7 @@ class ContentService {
 
         for (const fileName of projectFiles) {
             try {
-                const content = await this.fetchMarkdown(`/content/projects/${fileName}`);
+                const content = await this.fetchMarkdown(`content/projects/${fileName}`);
                 const { metadata } = this.parseFrontmatter(content);
                 
                 projects.push({
@@ -1942,7 +1942,8 @@ function initProjectNavButtons() {
         
         prevBtn.addEventListener('click', () => {
             const prevId = projectFiles[currentIndex - 1].replace('.md', '');
-            window.location.href = `/project?id=${prevId}&section=background`;
+            const base = window.location.href.split('?')[0];
+            window.location.href = `${base}?id=${prevId}&section=background`;
         });
     } else {
         prevBtn.disabled = true;
@@ -1960,7 +1961,8 @@ function initProjectNavButtons() {
         
         nextBtn.addEventListener('click', () => {
             const nextId = projectFiles[currentIndex + 1].replace('.md', '');
-            window.location.href = `/project?id=${nextId}&section=background`;
+            const base = window.location.href.split('?')[0];
+            window.location.href = `${base}?id=${nextId}&section=background`;
         });
     } else {
         nextBtn.disabled = true;
