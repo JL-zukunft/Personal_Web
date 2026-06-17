@@ -546,7 +546,8 @@ function toggleCase(projectId) {
 // 打开项目详情页
 // view 参数：'map' 跳转到地图视图，'article' 跳转到文章视图（默认）
 function openProject(projectId, view = 'article') {
-    const url = new URL('/project', window.location.origin);
+    const base = window.location.href.replace(/\/[^\/]*$/, '') + '/project.html';
+    const url = new URL(base);
     url.searchParams.set('id', projectId);
     if (view === 'map') {
         // 地图视图：不带 section 参数
