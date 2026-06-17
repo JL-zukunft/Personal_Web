@@ -148,11 +148,11 @@ section {
 .cases-layout {
     display: flex;
     height: 100%;
-    padding: 32px; /* 改为padding而不是margin，不占据额外空间 */
+    padding: 8px 32px 32px 32px; /* 顶部收紧，整体视觉上移 */
     background: var(--cream);
     position: relative;
-    z-index: 2; /* 确保内容在点阵 (z-index: 0) 之上 */
-    box-sizing: border-box; /* 确保padding包含在高度内 */
+    z-index: 2;
+    box-sizing: border-box;
 }
 
 /* 左侧项目索引导航 */
