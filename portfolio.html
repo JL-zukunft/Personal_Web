@@ -1001,9 +1001,9 @@ section {
 .cases-detail-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 50px;
+    gap: 24px; /* 收窄间距，与上方图片等宽对齐 */
     flex: 1;
-    overflow: hidden;
+    overflow: visible;
 }
 
 /* 强化内容叙述区，使其像卡片 */
@@ -1016,14 +1016,10 @@ section {
     border-right: 1px solid rgba(74, 93, 62, 0.1);
     border-top: 1px solid rgba(74, 93, 62, 0.1);
     border-bottom: 1px solid rgba(74, 93, 62, 0.1);
-
-    /* --- 核心修改：固定高度 --- */
-    height: 135px;   
-    width: 280px;       /* 这里设定你想要的固定高度，例如 320px */
     display: flex;
-    overflow: hidden;
+    overflow: visible; /* 不裁剪，内容完整展示 */
     flex-direction: column;
-    box-sizing: border-box; /* 确保 padding 不撑大容器 */
+    box-sizing: border-box;
 }
 /* 档案卡边角装饰（对焦框） */
 .cases-narrative::before {
@@ -1034,18 +1030,7 @@ section {
     border-top: 2px solid var(--sage);
     border-right: 2px solid var(--sage);
 }
-.cases-narrative::-webkit-scrollbar {
-    width: 4px;
-}
-
-.cases-narrative::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.cases-narrative::-webkit-scrollbar-thumb {
-    background: var(--sage);
-    border-radius: 2px;
-}
+/* scrollbar removed from cases-narrative */
 
 .cases-section-block {
     position: relative;
@@ -1140,23 +1125,12 @@ section {
 .cases-metadata {
     display: flex;
     flex-direction: column;
-    gap: 32px;
-    overflow-y: auto;
-    padding-right: 10px;
+    gap: 16px;
+    overflow: visible; /* 不裁剪，内容完整展示 */
+    padding-right: 0;
 }
 
-.cases-metadata::-webkit-scrollbar {
-    width: 4px;
-}
-
-.cases-metadata::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.cases-metadata::-webkit-scrollbar-thumb {
-    background: var(--sage);
-    border-radius: 2px;
-}
+/* scrollbar removed from cases-metadata */
 
 .cases-metadata-block {
     display: flex;
@@ -1184,8 +1158,8 @@ section {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    padding: 12px 0;
-    border-bottom: 1px dashed rgba(74, 93, 62, 0.2); /* 工业风虚线 */
+    padding: 8px 0;
+    border-bottom: 1px dashed rgba(74, 93, 62, 0.2);
 }
 .cases-metadata-label::before {
     content: '// '; /* 增加技术感符号 */
@@ -1400,11 +1374,11 @@ section {
     }
     
     .cases-narrative {
-        gap: 24px;
+        gap: 16px;
     }
     
     .cases-metadata {
-        gap: 24px;
+        gap: 16px;
     }
 }
 
